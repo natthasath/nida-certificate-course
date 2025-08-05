@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+
+<html lang="th">
+<head><meta content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' https://hooks.airtable.com https://api.airtable.com; font-src 'self' data:;" http-equiv="Content-Security-Policy"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>แบบประเมินหลักสูตร Elevate Your Work with AI รุ่นที่ 1 ในหัวข้อ "รายงานการประชุมยุคใหม่ สั่งได้ด้วย AI &amp; MS Teams"</title>
+<link href="./css/style-01.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>แบบประเมินหลักสูตร Elevate Your Work with AI รุ่นที่ 1 <br/> ในหัวข้อ "รายงานการประชุมยุคใหม่ สั่งได้ด้วย AI &amp; MS Teams"</h1>
+<div class="event-info">
+                วันที่ 6 สิงหาคม 2568<br/>
+                เวลา 13.00 – 16.30 น.<br/>
+                ณ ห้องปฏิบัติการคอมพิวเตอร์ 2 ชั้น 9 อาคารสยามบรมราชกุมารี<br/>
+                สถาบันบัณฑิตพัฒนบริหารศาสตร์
+            </div>
+</div>
+<form class="form-container" id="surveyForm">
+<!-- ข้อมูลผู้เข้าอบรม -->
+<div class="section">
+<div class="form-group">
+<label>คำนำหน้าชื่อ <span class="required">*</span></label>
+<div style="display: flex; gap: 20px; margin-top: 8px;">
+<label style="display: flex; align-items: center; font-weight: normal; cursor: pointer;">
+<input name="title" required="" style="margin-right: 6px;" type="radio" value="นาย"/>
+                            นาย
+                        </label>
+<label style="display: flex; align-items: center; font-weight: normal; cursor: pointer;">
+<input name="title" required="" style="margin-right: 6px;" type="radio" value="นาง"/>
+                            นาง
+                        </label>
+<label style="display: flex; align-items: center; font-weight: normal; cursor: pointer;">
+<input name="title" required="" style="margin-right: 6px;" type="radio" value="นางสาว"/>
+                            นางสาว
+                        </label>
+</div>
+</div>
+<div class="form-group">
+<label for="fullname">ชื่อ-นามสกุล <span class="required">*</span></label>
+<input id="fullname" name="fullname" placeholder="กรอกชื่อ-นามสกุล (ไม่ต้องใส่คำนำหน้า)" required="" type="text"/>
+</div>
+<div class="form-group">
+<label for="email">อีเมล <span class="required">*</span></label>
+<input id="email" name="email" placeholder="example@email.com" required="" type="email"/>
+</div>
+<div class="form-group">
+<label for="organization">หน่วยงาน <span class="required">*</span></label>
+<input id="organization" name="organization" placeholder="กรอกชื่อหน่วยงาน" required="" type="text"/>
+</div>
+</div>
+<!-- 1. ระดับความพอใจด้านเนื้อหา -->
+<div class="section">
+<div class="likert-section">
+<h3>1. ระดับความพอใจด้านเนื้อหา</h3>
+<div class="likert-header">
+<div>มากที่สุด (5)</div>
+<div>มาก (4)</div>
+<div>ปานกลาง (3)</div>
+<div>น้อย (2)</div>
+<div>น้อยที่สุด (1)</div>
+</div>
+<div class="likert-question">
+<div class="question-text">1.1 หลักสูตรตรงตามวัตถุประสงค์ ครบถ้วนและทันสมัย</div>
+<div class="likert-scale">
+<div class="likert-option">
+<label>
+<input name="q1_1" required="" type="radio" value="5"/>
+<span class="label-text">5</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q1_1" type="radio" value="4"/>
+<span class="label-text">4</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q1_1" type="radio" value="3"/>
+<span class="label-text">3</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q1_1" type="radio" value="2"/>
+<span class="label-text">2</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q1_1" type="radio" value="1"/>
+<span class="label-text">1</span>
+</label>
+</div>
+</div>
+</div>
+<div class="likert-question">
+<div class="question-text">1.2 ความรู้ที่ได้รับจากการอบรม สามารถนำไปใช้ประโยชน์ในชีวิตประจำวันได้</div>
+<div class="likert-scale">
+<div class="likert-option">
+<label>
+<input name="q1_2" required="" type="radio" value="5"/>
+<span class="label-text">5</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q1_2" type="radio" value="4"/>
+<span class="label-text">4</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q1_2" type="radio" value="3"/>
+<span class="label-text">3</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q1_2" type="radio" value="2"/>
+<span class="label-text">2</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q1_2" type="radio" value="1"/>
+<span class="label-text">1</span>
+</label>
+</div>
+</div>
+</div>
+<div class="likert-question">
+<div class="question-text">1.3 ระยะเวลาของการอบรมมีความเหมาะสม</div>
+<div class="likert-scale">
+<div class="likert-option">
+<label>
+<input name="q1_3" required="" type="radio" value="5"/>
+<span class="label-text">5</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q1_3" type="radio" value="4"/>
+<span class="label-text">4</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q1_3" type="radio" value="3"/>
+<span class="label-text">3</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q1_3" type="radio" value="2"/>
+<span class="label-text">2</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q1_3" type="radio" value="1"/>
+<span class="label-text">1</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 2. ระดับความพอใจด้านวิทยากร -->
+<div class="section">
+<div class="likert-section">
+<h3>2. ระดับความพอใจด้านวิทยากร</h3>
+<div class="likert-header">
+<div>มากที่สุด (5)</div>
+<div>มาก (4)</div>
+<div>ปานกลาง (3)</div>
+<div>น้อย (2)</div>
+<div>น้อยที่สุด (1)</div>
+</div>
+<div class="likert-question">
+<div class="question-text">2.1 วิทยากรมีความรู้ความชำนาญในเนื้อหาที่บรรยาย</div>
+<div class="likert-scale">
+<div class="likert-option">
+<label>
+<input name="q2_1" required="" type="radio" value="5"/>
+<span class="label-text">5</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q2_1" type="radio" value="4"/>
+<span class="label-text">4</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q2_1" type="radio" value="3"/>
+<span class="label-text">3</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q2_1" type="radio" value="2"/>
+<span class="label-text">2</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q2_1" type="radio" value="1"/>
+<span class="label-text">1</span>
+</label>
+</div>
+</div>
+</div>
+<div class="likert-question">
+<div class="question-text">2.2 วิทยากรมีความสามารถในการถ่ายทอดได้ชัดเจนและเข้าใจง่าย</div>
+<div class="likert-scale">
+<div class="likert-option">
+<label>
+<input name="q2_2" required="" type="radio" value="5"/>
+<span class="label-text">5</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q2_2" type="radio" value="4"/>
+<span class="label-text">4</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q2_2" type="radio" value="3"/>
+<span class="label-text">3</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q2_2" type="radio" value="2"/>
+<span class="label-text">2</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q2_2" type="radio" value="1"/>
+<span class="label-text">1</span>
+</label>
+</div>
+</div>
+</div>
+<div class="likert-question">
+<div class="question-text">2.3 วิทยากรตอบข้อซักถามได้ตรงประเด็น</div>
+<div class="likert-scale">
+<div class="likert-option">
+<label>
+<input name="q2_3" required="" type="radio" value="5"/>
+<span class="label-text">5</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q2_3" type="radio" value="4"/>
+<span class="label-text">4</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q2_3" type="radio" value="3"/>
+<span class="label-text">3</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q2_3" type="radio" value="2"/>
+<span class="label-text">2</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q2_3" type="radio" value="1"/>
+<span class="label-text">1</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 3. ระดับความพอใจด้านกระบวนการ ขั้นตอนการให้บริการ -->
+<div class="section">
+<div class="likert-section">
+<h3>3. ระดับความพอใจด้านกระบวนการ ขั้นตอนการให้บริการ</h3>
+<div class="likert-header">
+<div>มากที่สุด (5)</div>
+<div>มาก (4)</div>
+<div>ปานกลาง (3)</div>
+<div>น้อย (2)</div>
+<div>น้อยที่สุด (1)</div>
+</div>
+<div class="likert-question">
+<div class="question-text">3.1 ความพร้อมของสถานที่จัดอบรม</div>
+<div class="likert-scale">
+<div class="likert-option">
+<label>
+<input name="q3_1" required="" type="radio" value="5"/>
+<span class="label-text">5</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q3_1" type="radio" value="4"/>
+<span class="label-text">4</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q3_1" type="radio" value="3"/>
+<span class="label-text">3</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q3_1" type="radio" value="2"/>
+<span class="label-text">2</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q3_1" type="radio" value="1"/>
+<span class="label-text">1</span>
+</label>
+</div>
+</div>
+</div>
+<div class="likert-question">
+<div class="question-text">3.2 เจ้าหน้าที่มีความเอาใจใส่ กระตือรือร้น และเต็มใจให้บริการ</div>
+<div class="likert-scale">
+<div class="likert-option">
+<label>
+<input name="q3_2" required="" type="radio" value="5"/>
+<span class="label-text">5</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q3_2" type="radio" value="4"/>
+<span class="label-text">4</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q3_2" type="radio" value="3"/>
+<span class="label-text">3</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q3_2" type="radio" value="2"/>
+<span class="label-text">2</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q3_2" type="radio" value="1"/>
+<span class="label-text">1</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 4. ระดับความพอใจด้านการประเมินความรู้ -->
+<div class="section">
+<div class="likert-section">
+<h3>4. ระดับความพอใจด้านการประเมินความรู้ (Knowledge)</h3>
+<div class="likert-header">
+<div>มากที่สุด (5)</div>
+<div>มาก (4)</div>
+<div>ปานกลาง (3)</div>
+<div>น้อย (2)</div>
+<div>น้อยที่สุด (1)</div>
+</div>
+<div class="likert-question">
+<div class="question-text">4.1 ความรู้ของท่านก่อนการฝึกอบรม</div>
+<div class="likert-scale">
+<div class="likert-option">
+<label>
+<input name="q4_1" required="" type="radio" value="5"/>
+<span class="label-text">5</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q4_1" type="radio" value="4"/>
+<span class="label-text">4</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q4_1" type="radio" value="3"/>
+<span class="label-text">3</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q4_1" type="radio" value="2"/>
+<span class="label-text">2</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q4_1" type="radio" value="1"/>
+<span class="label-text">1</span>
+</label>
+</div>
+</div>
+</div>
+<div class="likert-question">
+<div class="question-text">4.2 ความรู้ของท่านหลังการฝึกอบรม</div>
+<div class="likert-scale">
+<div class="likert-option">
+<label>
+<input name="q4_2" required="" type="radio" value="5"/>
+<span class="label-text">5</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q4_2" type="radio" value="4"/>
+<span class="label-text">4</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q4_2" type="radio" value="3"/>
+<span class="label-text">3</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q4_2" type="radio" value="2"/>
+<span class="label-text">2</span>
+</label>
+</div>
+<div class="likert-option">
+<label>
+<input name="q4_2" type="radio" value="1"/>
+<span class="label-text">1</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 5. ข้อคิดเห็น / ข้อเสนอแนะเพิ่มเติม -->
+<div class="section">
+<div class="form-group">
+<label for="suggestions">5. ข้อคิดเห็น / ข้อเสนอแนะเพิ่มเติม</label>
+<textarea id="suggestions" name="suggestions" rows="5"></textarea>
+</div>
+</div>
+<div class="submit-section">
+<button class="submit-btn" type="submit">ส่งแบบประเมิน</button>
+</div>
+</form>
+</div>
+<div id="certificate-container">
+<button class="close-btn" onclick="closeCertificate()">×</button>
+<div class="certificate" id="certificate">
+<div id="certificate-svg-container"></div>
+</div>
+<button class="download-btn" onclick="downloadCertificate()">ดาวน์โหลด Certificate</button>
+</div>
+<script>
+/**
+ * Airtable submission + Certificate generation
+ * -------------------------------------------
+ * SAFE BY DEFAULT: Uses Airtable Automation Webhook (no token in browser).
+ * Fill in AIRTABLE_WEBHOOK_URL below. If left empty and you still set PAT,
+ * the code can POST to Airtable REST, but this is NOT recommended on the client.
+ *
+ * CORS Strategy:
+ * 1) Try fetch() POST to webhook with JSON (most cases OK).
+ * 2) On failure (TypeError/CORS), fallback to navigator.sendBeacon() which is
+ *    allowed cross-origin without CORS preflight. We won't read a response,
+ *    but the data is delivered best-effort.
+ */
+
+const CONFIG = {
+  AIRTABLE_WEBHOOK_URL: "https://hooks.airtable.com/workflows/v1/genericWebhook/appf6EWFcCrABAFqu/wfl8VY6PLfsawwGiT/wtrGA3mJegx2QZ65a", // <-- Paste your Airtable Automation "Incoming Webhook" URL here.
+  // Optional/direct REST (NOT recommended in browser; token would be exposed):
+  AIRTABLE_REST: {
+    PAT: "", // DO NOT paste your real PAT here. Use webhook instead.
+    BASE_ID: "appf6EWFcCrABAFqu",
+    TABLE_NAME: "Survey-01"
+  }
+};
+
+// Utility: Serialize form into a flat object
+function serializeForm(form) {
+  const data = {};
+  const formData = new FormData(form);
+  for (const [key, value] of formData.entries()) {
+    if (data[key] !== undefined) {
+      // handle multi-select later if needed
+      if (!Array.isArray(data[key])) data[key] = [data[key]];
+      data[key].push(value);
+    } else {
+      data[key] = value;
+    }
+  }
+  return data;
+}
+
+function getSubmissionPayload() {
+  const form = document.getElementById('surveyForm');
+  const data = serializeForm(form);
+
+  const titleEl = document.querySelector('input[name="title"]:checked');
+  const title = titleEl ? titleEl.value : "";
+
+  // combine title + fullname with a space in-between
+  const fullDisplayName = title ? `${title} ${data.fullname || ""}`.trim() : (data.fullname || "");
+
+  // extra metadata
+  const meta = {
+    submitted_at: new Date().toISOString(),
+    user_agent: navigator.userAgent,
+    referrer: document.referrer || ""
+  };
+
+  // Build a flat "fields" object expected by Airtable
+  const fields = {
+    title: title,
+    fullname: data.fullname || "",
+    email: data.email || "",
+    organization: data.organization || "",
+    q1_1: data.q1_1 || "",
+    q1_2: data.q1_2 || "",
+    q1_3: data.q1_3 || "",
+    q2_1: data.q2_1 || "",
+    q2_2: data.q2_2 || "",
+    q2_3: data.q2_3 || "",
+    q3_1: data.q3_1 || "",
+    q3_2: data.q3_2 || "",
+    q4_1: data.q4_1 || "",
+    q4_2: data.q4_2 || "",
+    suggestions: data.suggestions || "",
+    submitted_at: meta.submitted_at,
+    user_agent: meta.user_agent,
+    referrer: meta.referrer,
+    full_display_name: fullDisplayName
+  };
+
+  return { fields, fullDisplayName };
+}
+
+// Send via Airtable Automation Webhook (preferred)
+async function sendViaWebhook(fields) {
+  if (!CONFIG.AIRTABLE_WEBHOOK_URL) return { ok: false, via: "webhook", skipped: true };
+
+  try {
+    const res = await fetch(CONFIG.AIRTABLE_WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(fields),
+      mode: "cors",
+      keepalive: true
+    });
+    // Some webhook endpoints may not return CORS headers; treat opaque as success
+    if (res.ok || res.type === "opaque") {
+      return { ok: true, via: "webhook" };
+    } else {
+      return { ok: false, via: "webhook", status: res.status };
+    }
+  } catch (err) {
+    // Likely CORS/network error -> fallback to sendBeacon
+    try {
+      const blob = new Blob([JSON.stringify(fields)], { type: "application/json" });
+      const sent = navigator.sendBeacon(CONFIG.AIRTABLE_WEBHOOK_URL, blob);
+      return { ok: sent, via: "webhook-beacon", note: "fallback sendBeacon" };
+    } catch (e2) {
+      return { ok: false, via: "webhook", error: err?.message || String(err) };
+    }
+  }
+}
+
+// Direct REST (not recommended for client-side; leaves PAT exposed)
+async function sendViaRest(fields) {
+  const { PAT, BASE_ID, TABLE_NAME } = CONFIG.AIRTABLE_REST;
+  if (!PAT || !BASE_ID || !TABLE_NAME) return { ok: false, via: "rest", skipped: true };
+
+  try {
+    const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${PAT}`
+      },
+      body: JSON.stringify({ records: [{ fields }] }),
+      mode: "cors",
+      keepalive: true
+    });
+    if (res.ok) return { ok: true, via: "rest" };
+    return { ok: false, via: "rest", status: res.status, text: await res.text() };
+  } catch (err) {
+    return { ok: false, via: "rest", error: err?.message || String(err) };
+  }
+}
+
+// UI helpers
+function setSubmitting(isSubmitting) {
+  const btn = document.querySelector('.submit-btn');
+  if (!btn) return;
+  btn.disabled = isSubmitting;
+  btn.textContent = isSubmitting ? 'กำลังส่ง...' : 'ส่งแบบประเมิน';
+}
+
+function notify(message, type = "info") {
+  // simple, non-blocking notice
+  const note = document.createElement('div');
+  note.className = `notice ${type}`;
+  note.textContent = message;
+  document.body.appendChild(note);
+  setTimeout(() => note.remove(), 5000);
+}
+
+// Certificate rendering (original behavior preserved)
+async function showCertificate(name) {
+  try {
+    const response = await fetch('./templates/certificate-01.svg');
+    const svgText = await response.text();
+    document.getElementById('certificate-svg-container').innerHTML = svgText;
+    const nameElement = document.querySelector('#certificate-svg-container #name');
+    if (nameElement) nameElement.textContent = name;
+    const container = document.getElementById('certificate-container');
+    container.classList.add('show');
+    setTimeout(() => {
+      document.querySelector('.certificate').style.animation = 'slideIn 0.5s ease-out';
+    }, 100);
+  } catch (error) {
+    console.error('Error loading certificate:', error);
+    alert('ไม่สามารถโหลดไฟล์ certificate.svg ได้ กรุณาตรวจสอบว่าไฟล์อยู่ในโฟลเดอร์เดียวกับ index.html');
+  }
+}
+
+function closeCertificate() {
+  const container = document.getElementById('certificate-container');
+  container.classList.remove('show');
+}
+
+async function downloadCertificate() {
+  const svgElement = document.querySelector('#certificate-svg-container svg');
+  if (!svgElement) {
+    alert('ไม่พบ Certificate');
+    return;
+  }
+  const clonedSvg = svgElement.cloneNode(true);
+  const svgString = new XMLSerializer().serializeToString(clonedSvg);
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = 2000;
+  canvas.height = 1414;
+  const img = new Image();
+  const blob = new Blob([svgString], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  img.onload = function() {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const svgWidth = img.width || 1920;
+    const svgHeight = img.height || 1080;
+    const scale = Math.min(canvas.width / svgWidth, canvas.height / svgHeight);
+    const scaledWidth = svgWidth * scale;
+    const scaledHeight = svgHeight * scale;
+    const x = (canvas.width - scaledWidth) / 2;
+    const y = (canvas.height - scaledHeight) / 2;
+    ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
+    canvas.toBlob(function(blob) {
+      const link = document.createElement('a');
+      const date = new Date().toLocaleDateString('th-TH', {
+        year: 'numeric', month: '2-digit', day: '2-digit'
+      }).replace(/\//g, '-');
+      link.download = `AI_Training_Certificate_NIDA_${date}.png`;
+      link.href = URL.createObjectURL(blob);
+      link.click();
+      URL.revokeObjectURL(url);
+    }, 'image/png', 1.0);
+  };
+  img.onerror = function() {
+    alert('เกิดข้อผิดพลาดในการสร้างรูปภาพ กรุณาลองใหม่อีกครั้ง');
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+}
+
+// Close certificate on background click (keep original behavior)
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('certificate-container').addEventListener('click', (e) => {
+    if (e.target.id === 'certificate-container') closeCertificate();
+  });
+});
+
+// Form submission
+document.getElementById('surveyForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const title = document.querySelector('input[name="title"]:checked');
+  const fullname = document.getElementById('fullname').value;
+
+  if (!title) {
+    alert('กรุณาเลือกคำนำหน้าชื่อ');
+    return;
+  }
+
+  // Validate required radio groups
+  const requiredFields = [
+    'q1_1', 'q1_2', 'q1_3',
+    'q2_1', 'q2_2', 'q2_3',
+    'q3_1', 'q3_2',
+    'q4_1', 'q4_2'
+  ];
+  for (const fieldName of requiredFields) {
+    const field = document.querySelector(`input[name="${fieldName}"]:checked`);
+    if (!field) {
+      alert('กรุณาตอบคำถามให้ครบทุกข้อ');
+      return;
+    }
+  }
+
+  const { fields, fullDisplayName } = getSubmissionPayload();
+
+  // Show certificate immediately (non-blocking UX)
+  showCertificate(fullDisplayName);
+
+  // Attempt to submit to Airtable in background
+  setSubmitting(true);
+  let result = { ok: false, via: "none" };
+
+  // Preferred path: webhook
+  result = await sendViaWebhook(fields);
+
+  // If webhook unavailable/failed and REST credentials exist (NOT recommended), try REST
+  if (!result.ok && CONFIG.AIRTABLE_REST.PAT) {
+    const restRes = await sendViaRest(fields);
+    if (restRes.ok) result = restRes;
+  }
+
+  setSubmitting(false);
+
+  // Notify user (non-blocking)
+  if (result.ok) {
+    if (result.via === "webhook" || result.via === "webhook-beacon") {
+      notify('ส่งข้อมูลไปยัง Airtable สำเร็จ', 'success');
+    } else {
+      notify('ส่งข้อมูลไปยัง Airtable (REST) สำเร็จ', 'success');
+    }
+  } else {
+    notify('ไม่สามารถส่งข้อมูลไปยัง Airtable ได้ในขณะนี้ แต่ใบประกาศนียบัตรถูกสร้างเรียบร้อย', 'warning');
+    console.warn('Airtable submission failed:', result);
+  }
+});
+
+// Expose certificate helpers to global (for existing buttons)
+window.closeCertificate = closeCertificate;
+window.downloadCertificate = downloadCertificate;
+
+// === Diagnostics (hidden by default; show with ?debug=1) ===
+(function initDiagnostics(){
+  const url = new URL(location.href);
+  const show = url.searchParams.get('debug') === '1';
+  // Allow override webhook via query string for quick testing
+  const qWebhook = url.searchParams.get('webhook');
+  try {
+    if (qWebhook) localStorage.setItem('airtableWebhook', qWebhook);
+    const saved = localStorage.getItem('airtableWebhook');
+    if (saved && !CONFIG.AIRTABLE_WEBHOOK_URL) {
+      CONFIG.AIRTABLE_WEBHOOK_URL = saved;
+      console.info('[Diag] Using webhook from localStorage.');
+    }
+  } catch(e) { console.warn('[Diag] localStorage not accessible.', e); }
+
+  if (!show) return;
+
+  const badge = document.createElement('div');
+  badge.id = 'diag-badge';
+  badge.innerHTML = `
+    <div class="diag-inner">
+      <div><strong>Airtable Webhook:</strong> <span id="diag-webhook">${CONFIG.AIRTABLE_WEBHOOK_URL ? 'SET' : 'NOT SET'}</span></div>
+      <div class="diag-actions">
+        <button id="diag-test">Test Send</button>
+        <button id="diag-set">Set Webhook</button>
+      </div>
+    </div>`;
+  document.addEventListener('DOMContentLoaded', ()=>{
+    document.body.appendChild(badge);
+    const testBtn = document.getElementById('diag-test');
+    const setBtn  = document.getElementById('diag-set');
+    testBtn?.addEventListener('click', async ()=>{
+      const payload = { ping:true, ts:new Date().toISOString(), page:location.href };
+      if (!CONFIG.AIRTABLE_WEBHOOK_URL) { alert('Webhook URL is not set. Click "Set Webhook".'); return; }
+      try {
+        const res = await fetch(CONFIG.AIRTABLE_WEBHOOK_URL, {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload), mode:'cors', keepalive:true
+        });
+        if (res.ok || res.type === 'opaque') alert('Test sent (fetch). Check Automation run history.');
+        else alert('Fetch HTTP '+res.status+' ; check CSP or Automation.');
+      } catch(err) {
+        try {
+          const blob = new Blob([JSON.stringify(payload)], { type:'application/json' });
+          const sent = navigator.sendBeacon(CONFIG.AIRTABLE_WEBHOOK_URL, blob);
+          alert(sent ? 'Test sent via sendBeacon.' : 'Failed to send via fetch/beacon.');
+        } catch(e2) {
+          alert('Failed to send test: '+(e2?.message||e2));
+        }
+      }
+    });
+    setBtn?.addEventListener('click', ()=>{
+      const v = prompt('Paste Airtable Webhook URL:');
+      if (v) {
+        CONFIG.AIRTABLE_WEBHOOK_URL = v.trim();
+        try { localStorage.setItem('airtableWebhook', CONFIG.AIRTABLE_WEBHOOK_URL); } catch(_){}
+        document.getElementById('diag-webhook').textContent = 'SET';
+        alert('Webhook saved. Try "Test Send".');
+      }
+    });
+  });
+
+  const style = document.createElement('style');
+  style.textContent = `
+    #diag-badge { position: fixed; bottom: 20px; left: 20px; z-index: 9999; font-family: system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    #diag-badge .diag-inner { background: rgba(20,20,20,.9); color:#fff; padding:10px 12px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,.2); font-size:12px; display:flex; align-items:center; gap:10px; }
+    #diag-badge .diag-actions button { margin-left:6px; padding:6px 8px; border:0; border-radius:6px; cursor:pointer; }
+  `;
+  document.head.appendChild(style);
+})();
+
+// Warn if webhook missing on submit (still allow certificate)
+document.addEventListener('submit', (e)=>{
+  if (e.target && e.target.id === 'surveyForm') {
+    if (!CONFIG.AIRTABLE_WEBHOOK_URL) {
+      console.warn('[Diag] CONFIG.AIRTABLE_WEBHOOK_URL is empty. No webhook submissions will occur.');
+      setTimeout(()=>{
+        const msg = document.createElement('div');
+        msg.className = 'notice warning';
+        msg.textContent = 'ยังไม่ได้ตั้งค่า Airtable Webhook URL — ข้อมูลจะไม่ถูกส่งไป Airtable';
+        document.body.appendChild(msg);
+        setTimeout(()=>msg.remove(), 6000);
+      }, 0);
+    }
+  }
+}, true);
+</script>
+<style>
+/* Minimal notice styles */
+.notice {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #222;
+  color: #fff;
+  opacity: 0.95;
+  font-size: 14px;
+  z-index: 9999;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+.notice.success { background: #2e7d32; }
+.notice.warning { background: #b26a00; }
+.notice.info { background: #37474f; }
+</style>
+</body>
+</html>

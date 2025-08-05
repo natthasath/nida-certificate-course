@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIDA - รวมแบบประเมินหลักสูตร Elevate Your Work with AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"%3E%3Cpath d="M 100 0 L 0 0 0 100" fill="none" stroke="white" stroke-width="0.5" opacity="0.1"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100%25" height="100%25" fill="url(%23grid)" /%3E%3C/svg%3E');
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 3rem 0;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+        }
+
+        .survey-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .survey-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .survey-card.disabled {
+            background: rgba(255, 255, 255, 0.6);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .survey-card.disabled:hover {
+            transform: none;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .survey-card:not(.disabled)::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .survey-card:not(.disabled):hover::before {
+            left: 100%;
+        }
+
+        .survey-card:not(.disabled):hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .survey-card:nth-child(1) .survey-number {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .survey-card:nth-child(2) .survey-number {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .survey-card:nth-child(3) .survey-number {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .survey-card:nth-child(4) .survey-number {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+
+        .survey-card.disabled .survey-number {
+            background: #999 !important;
+        }
+
+        .survey-number {
+            display: inline-block;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .survey-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .survey-card.disabled .survey-title {
+            color: #666;
+        }
+
+        .survey-topic {
+            font-size: 1rem;
+            color: #718096;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .survey-link {
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .survey-card.disabled .survey-link {
+            background: #ccc;
+            box-shadow: none;
+        }
+
+        .survey-card:not(.disabled) .survey-link:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .survey-link svg {
+            margin-left: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .survey-card:not(.disabled):hover .survey-link svg {
+            transform: translateX(5px);
+        }
+
+        .coming-soon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 193, 7, 0.9);
+            color: #856404;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .coming-soon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .shape1 {
+            width: 200px;
+            height: 200px;
+            background: white;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .shape2 {
+            width: 150px;
+            height: 150px;
+            background: white;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .shape3 {
+            width: 100px;
+            height: 100px;
+            background: white;
+            bottom: 10%;
+            left: 15%;
+            animation-delay: 4s;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .survey-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .survey-card {
+                padding: 1.5rem;
+            }
+
+            .survey-title {
+                font-size: 1.25rem;
+            }
+
+            .coming-soon {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shape shape1"></div>
+    <div class="floating-shape shape2"></div>
+    <div class="floating-shape shape3"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="badge">✨ NIDA - สถาบันบัณฑิตพัฒนบริหารศาสตร์</div>
+            <h1>แบบประเมินหลักสูตร</h1>
+            <p>Elevate Your Work with AI รุ่นที่ 1</p>
+        </div>
+
+        <div class="survey-grid">
+            <a href="./survey/survey-01.html" class="survey-card">
+                <span class="survey-number">แบบประเมิน 1</span>
+                <h2 class="survey-title">รายงานการประชุมยุคใหม่ สั่งได้ด้วย AI & MS Teams</h2>
+                <p class="survey-topic">เรียนรู้การใช้ AI ในการจดบันทึกและสรุปการประชุมอัตโนมัติ พร้อมเทคนิคการใช้งาน MS Teams อย่างมืออาชีพ</p>
+                <span class="survey-link">
+                    ทำแบบประเมิน
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </a>
+
+            <div class="survey-card disabled">
+                <div class="coming-soon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    ยังไม่เปิด
+                </div>
+                <span class="survey-number">แบบประเมิน 2</span>
+                <h2 class="survey-title">Canva มือใหม่เสกงานจากใจให้เป็นจริง</h2>
+                <p class="survey-topic">ออกแบบสื่อสร้างสรรค์ด้วย Canva สำหรับผู้เริ่มต้น สร้างงานดีไซน์ได้ง่าย ๆ แบบมืออาชีพ</p>
+                <span class="survey-link">
+                    ทำแบบประเมิน
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </div>
+
+            <div class="survey-card disabled">
+                <div class="coming-soon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    ยังไม่เปิด
+                </div>
+                <span class="survey-number">แบบประเมิน 3</span>
+                <h2 class="survey-title">The Art of Prompting: พร้อมท์เป็นเห็นงานศิลป์</h2>
+                <p class="survey-topic">เทคนิคการเขียน Prompt เพื่อใช้งาน AI อย่างมีประสิทธิภาพ ปลดล็อกศักยภาพของ AI ได้เต็มที่</p>
+                <span class="survey-link">
+                    ทำแบบประเมิน
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </div>
+
+            <div class="survey-card disabled">
+                <div class="coming-soon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    ยังไม่เปิด
+                </div>
+                <span class="survey-number">แบบประเมิน 4</span>
+                <h2 class="survey-title">เทคนิคการวิเคราะห์ข้อมูลด้วย AI สำหรับมือใหม่</h2>
+                <p class="survey-topic">การใช้ AI ในการวิเคราะห์และนำเสนอข้อมูลเบื้องต้น เปลี่ยนข้อมูลให้เป็น Insight ที่มีคุณค่า</p>
+                <span class="survey-link">
+                    ทำแบบประเมิน
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2024 National Institute of Development Administration (NIDA)</p>
+            <p>สถาบันบัณฑิตพัฒนบริหารศาสตร์ • ยกระดับการทำงานด้วย AI</p>
+        </div>
+    </div>
+</body>
+</html>
