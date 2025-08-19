@@ -507,7 +507,7 @@
     
     <script>
         // *** ใส่ URL ของ Google Apps Script ที่นี่ ***
-        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx3PjOdwzPNEcwQ6wZLJXnbgvqJPxfche-YX6Phaq8nYKPHjnE7LQ0brNDTdciFTMrhqQ/exec';
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxEQWHlibWcC0oshqSS0oz67B2ViNG_yTFaYPOvDmznzW25XQi_pyStba_PmdeVudMSNA/exec';
         
         // Form submission
         document.getElementById('surveyForm').addEventListener('submit', async (e) => {
@@ -690,12 +690,11 @@
                 // Download as PNG with high quality
                 canvas.toBlob(function(blob) {
                     const link = document.createElement('a');
-                    const date = new Date().toLocaleDateString('th-TH', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit'
-                    }).replace(/\//g, '-');
-                    link.download = `AI_Training_Certificate_NIDA_${date}.png`;
+                    // Get email from form
+                    const email = document.getElementById('email').value;
+                    // Remove @ and . from email for filename
+                    const emailFilename = email.replace('@', '_at_').replace(/\./g, '_');
+                    link.download = `${email}.png`;
                     link.href = URL.createObjectURL(blob);
                     link.click();
                     

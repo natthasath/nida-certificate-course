@@ -484,9 +484,17 @@
             </div>
             
             <div class="submit-section">
-                <button type="submit" class="submit-btn">ส่งแบบประเมิน</button>
+                <button type="submit" class="submit-btn" id="submitBtn">ส่งแบบประเมิน</button>
             </div>
         </form>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
+            <div style="font-size: 18px; margin-bottom: 10px;">กำลังส่งข้อมูล...</div>
+            <div style="font-size: 14px; color: #666;">กรุณารอสักครู่</div>
+        </div>
     </div>
     
     <div id="certificate-container">
@@ -498,8 +506,11 @@
     </div>
     
     <script>
+        // *** ใส่ URL ของ Google Apps Script ที่นี่ ***
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxEQWHlibWcC0oshqSS0oz67B2ViNG_yTFaYPOvDmznzW25XQi_pyStba_PmdeVudMSNA/exec';
+        
         // Form submission
-        document.getElementById('surveyForm').addEventListener('submit', (e) => {
+        document.getElementById('surveyForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const title = document.querySelector('input[name="title"]:checked');
@@ -535,8 +546,65 @@
                 return;
             }
             
-            // Show certificate
-            showCertificate(fullNameWithTitle);
+            // Show loading
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            document.getElementById('submitBtn').disabled = true;
+            
+            // Collect form data
+            const formData = {
+                title: title.value,
+                fullname: fullname,
+                email: document.getElementById('email').value,
+                organization: document.getElementById('organization').value,
+                q1_1: document.querySelector('input[name="q1_1"]:checked').value,
+                q1_2: document.querySelector('input[name="q1_2"]:checked').value,
+                q1_3: document.querySelector('input[name="q1_3"]:checked').value,
+                q2_1: document.querySelector('input[name="q2_1"]:checked').value,
+                q2_2: document.querySelector('input[name="q2_2"]:checked').value,
+                q2_3: document.querySelector('input[name="q2_3"]:checked').value,
+                q3_1: document.querySelector('input[name="q3_1"]:checked').value,
+                q3_2: document.querySelector('input[name="q3_2"]:checked').value,
+                q4_1: document.querySelector('input[name="q4_1"]:checked').value,
+                q4_2: document.querySelector('input[name="q4_2"]:checked').value,
+                suggestions: document.getElementById('suggestions').value,
+                fullnameWithTitle: fullNameWithTitle,
+                courseTitle: 'รายงานการประชุมยุคใหม่ สั่งได้ด้วย AI & MS Teams',
+                courseDate: '6 สิงหาคม 2568'
+            };
+            
+            try {
+                // Send data to Google Apps Script
+                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Important for CORS
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                // Since we're using no-cors, we can't read the response
+                // But if the request goes through, we assume success
+                
+                // Hide loading
+                document.getElementById('loadingOverlay').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+                
+                // Show success message
+                alert('ส่งแบบประเมินเรียบร้อยแล้ว ขอบคุณสำหรับความคิดเห็นของท่าน');
+                
+                // Show certificate
+                showCertificate(fullNameWithTitle);
+                
+                // Optional: Reset form
+                // document.getElementById('surveyForm').reset();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loadingOverlay').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+                alert('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง');
+            }
         });
         
         async function showCertificate(name) {
@@ -622,12 +690,11 @@
                 // Download as PNG with high quality
                 canvas.toBlob(function(blob) {
                     const link = document.createElement('a');
-                    const date = new Date().toLocaleDateString('th-TH', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit'
-                    }).replace(/\//g, '-');
-                    link.download = `AI_Training_Certificate_NIDA_${date}.png`;
+                    // Get email from form
+                    const email = document.getElementById('email').value;
+                    // Remove @ and . from email for filename
+                    const emailFilename = email.replace('@', '_at_').replace(/\./g, '_');
+                    link.download = `${email}.png`;
                     link.href = URL.createObjectURL(blob);
                     link.click();
                     
