@@ -46,6 +46,7 @@ function doPost(e) {
     // =============================================
     let certificateUrl = '';
     let certificateFileId = '';
+    let certificateDownloadUrl = '';
     
     if (data.certificateImage) {
       try {
@@ -85,11 +86,33 @@ function doPost(e) {
         // เก็บ URL และ File ID
         certificateUrl = file.getUrl();
         certificateFileId = file.getId();
+        certificateDownloadUrl = `https://drive.google.com/uc?export=download&id=${certificateFileId}`;
         
         console.log('Certificate saved successfully!');
         console.log('File ID:', certificateFileId);
         console.log('File URL:', certificateUrl);
-        console.log('Direct download URL:', file.getDownloadUrl());
+        console.log('Download URL:', certificateDownloadUrl);
+        
+        // =============================================
+        // ส่งอีเมลพร้อม Certificate
+        // =============================================
+        if (data.email) {
+          try {
+            sendCertificateEmail(
+              data.email,
+              data.fullnameWithTitle || data.fullname,
+              data.courseTitle || 'รายงานการประชุมยุคใหม่ สั่งได้ด้วย AI & MS Teams',
+              data.courseDate || '6 สิงหาคม 2568',
+              certificateUrl,
+              certificateDownloadUrl,
+              file
+            );
+            console.log('✅ Certificate email sent successfully to:', data.email);
+          } catch (emailError) {
+            console.error('⚠️ Error sending email:', emailError);
+            // ไม่ให้ error email หยุดการทำงานหลัก
+          }
+        }
         
       } catch (certError) {
         console.error('Error saving certificate:', certError);
@@ -161,7 +184,8 @@ function doPost(e) {
         'email': data.email,
         'organization': data.organization,
         'certificate_saved': !!certificateFileId,
-        'certificate_url': certificateUrl
+        'certificate_url': certificateUrl,
+        'email_sent': true
       }
     };
     
@@ -193,7 +217,236 @@ function doPost(e) {
 }
 
 // ==========================================
-// 2. Function สำหรับเข้าถึงโฟลเดอร์ Certificate
+// 2. Function สำหรับส่งอีเมลพร้อม Certificate
+// ==========================================
+function sendCertificateEmail(recipientEmail, fullName, courseTitle, courseDate, certificateUrl, downloadUrl, certificateFile) {
+  try {
+    console.log('=== Sending Certificate Email ===');
+    console.log('To:', recipientEmail);
+    console.log('Name:', fullName);
+    
+    // หัวข้ออีเมล
+    const subject = `🎓 Certificate - ${courseTitle}`;
+    
+    // เนื้อหาอีเมล HTML
+    const htmlBody = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    .content {
+      padding: 30px;
+    }
+    .greeting {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .message {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .course-info {
+      background-color: #f8f9fa;
+      border-left: 4px solid #667eea;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .course-info h3 {
+      margin: 0 0 10px 0;
+      color: #333;
+      font-size: 16px;
+    }
+    .course-info p {
+      margin: 5px 0;
+      color: #666;
+    }
+    .download-section {
+      text-align: center;
+      margin: 30px 0;
+    }
+    .download-btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 600;
+      margin: 10px;
+      transition: transform 0.2s;
+    }
+    .download-btn:hover {
+      transform: translateY(-2px);
+    }
+    .secondary-btn {
+      display: inline-block;
+      padding: 10px 25px;
+      background-color: #f0f0f0;
+      color: #333;
+      text-decoration: none;
+      border-radius: 20px;
+      font-weight: 500;
+      margin: 10px;
+    }
+    .footer {
+      background-color: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+      color: #999;
+      font-size: 12px;
+    }
+    .logo {
+      margin-bottom: 15px;
+    }
+    .success-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+    .divider {
+      height: 1px;
+      background-color: #e0e0e0;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="success-icon">🎉</div>
+      <h1>ขอบคุณที่เข้าร่วมการอบรม</h1>
+    </div>
+    
+    <div class="content">
+      <div class="greeting">
+        สวัสดีคุณ${fullName} 👋
+      </div>
+      
+      <div class="message">
+        ขอขอบคุณที่ท่านได้เข้าร่วมการอบรมและทำแบบประเมินเรียบร้อยแล้ว 
+        ทางเราได้แนบเกียรติบัตรการเข้าร่วมอบรมมาพร้อมกับอีเมลฉบับนี้
+      </div>
+      
+      <div class="course-info">
+        <h3>📚 รายละเอียดหลักสูตร</h3>
+        <p><strong>หลักสูตร:</strong> ${courseTitle}</p>
+        <p><strong>วันที่อบรม:</strong> ${courseDate}</p>
+        <p><strong>สถานที่:</strong> สถาบันบัณฑิตพัฒนบริหารศาสตร์ (NIDA)</p>
+      </div>
+      
+      <div class="download-section">
+        <h3 style="color: #333;">📄 ดาวน์โหลดเกียรติบัตร</h3>
+        <a href="${downloadUrl}" class="download-btn">
+          ⬇️ ดาวน์โหลดเกียรติบัตร (PNG)
+        </a>
+        <br>
+        <a href="${certificateUrl}" class="secondary-btn">
+          👁️ ดูเกียรติบัตรออนไลน์
+        </a>
+      </div>
+      
+      <div class="divider"></div>
+      
+      <div class="message" style="font-size: 14px;">
+        <p>📌 <strong>หมายเหตุ:</strong></p>
+        <ul style="color: #666; padding-left: 20px;">
+          <li>เกียรติบัตรได้ถูกบันทึกไว้ใน Google Drive แล้ว</li>
+          <li>สามารถดาวน์โหลดได้ตลอดเวลาจากลิงก์ด้านบน</li>
+          <li>หากพบปัญหาในการดาวน์โหลด กรุณาติดต่อเจ้าหน้าที่</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p><strong>สถาบันบัณฑิตพัฒนบริหารศาสตร์</strong></p>
+      <p>National Institute of Development Administration (NIDA)</p>
+      <p>📧 ติดต่อสอบถาม: idt@nida.ac.th</p>
+      <div class="divider" style="margin: 15px auto; width: 50%;"></div>
+      <p style="font-size: 11px; color: #aaa;">
+        อีเมลฉบับนี้ถูกส่งอัตโนมัติ กรุณาอย่าตอบกลับ<br>
+        © 2568 NIDA - Institute of Digital Technology
+      </p>
+    </div>
+  </div>
+</body>
+</html>
+    `;
+    
+    // เนื้อหาอีเมลแบบ Plain Text (สำหรับกรณีที่ไม่รองรับ HTML)
+    const plainBody = `
+สวัสดีคุณ${fullName}
+
+ขอขอบคุณที่ท่านได้เข้าร่วมการอบรมและทำแบบประเมินเรียบร้อยแล้ว
+
+รายละเอียดหลักสูตร:
+- หลักสูตร: ${courseTitle}
+- วันที่อบรม: ${courseDate}
+- สถานที่: สถาบันบัณฑิตพัฒนบริหารศาสตร์ (NIDA)
+
+ดาวน์โหลดเกียรติบัตร:
+${downloadUrl}
+
+ดูเกียรติบัตรออนไลน์:
+${certificateUrl}
+
+หมายเหตุ:
+- เกียรติบัตรได้ถูกบันทึกไว้ใน Google Drive แล้ว
+- สามารถดาวน์โหลดได้ตลอดเวลาจากลิงก์ด้านบน
+- หากพบปัญหาในการดาวน์โหลด กรุณาติดต่อเจ้าหน้าที่
+
+ติดต่อสอบถาม: idt@nida.ac.th
+
+สถาบันบัณฑิตพัฒนบริหารศาสตร์
+National Institute of Development Administration (NIDA)
+    `;
+    
+    // ส่งอีเมลพร้อมแนบไฟล์
+    MailApp.sendEmail({
+      to: recipientEmail,
+      subject: subject,
+      body: plainBody,
+      htmlBody: htmlBody,
+      attachments: [certificateFile],
+      name: 'NIDA - Institute of Digital Technology'
+    });
+    
+    console.log('Email sent successfully with attachment');
+    
+  } catch (error) {
+    console.error('Error in sendCertificateEmail:', error);
+    throw error;
+  }
+}
+
+// ==========================================
+// 3. Function สำหรับเข้าถึงโฟลเดอร์ Certificate
 // ==========================================
 function getCertificateFolder() {
   try {
@@ -216,7 +469,7 @@ function getCertificateFolder() {
 }
 
 // ==========================================
-// 3. Function สำหรับตั้งค่าหัวตาราง (รันครั้งเดียว)
+// 4. Function สำหรับตั้งค่าหัวตาราง (รันครั้งเดียว)
 // ==========================================
 function setupHeaders() {
   try {
@@ -283,17 +536,11 @@ function setupHeaders() {
     }
     
     sheet.setColumnWidth(16, 300); // ข้อเสนอแนะ
-    
-    // คอลัมน์คะแนนเฉลี่ย (17-21)
-    for (let i = 17; i <= 21; i++) {
-      sheet.setColumnWidth(i, 120);
-    }
-    
-    sheet.setColumnWidth(22, 250); // หลักสูตร
-    sheet.setColumnWidth(23, 120); // วันที่อบรม
-    sheet.setColumnWidth(24, 200); // ชื่อเต็ม
-    sheet.setColumnWidth(25, 150); // Certificate File ID
-    sheet.setColumnWidth(26, 300); // Certificate URL
+    sheet.setColumnWidth(17, 250); // หลักสูตร
+    sheet.setColumnWidth(18, 120); // วันที่อบรม
+    sheet.setColumnWidth(19, 200); // ชื่อเต็ม
+    sheet.setColumnWidth(20, 150); // Certificate File ID
+    sheet.setColumnWidth(21, 300); // Certificate URL
     
     // ตั้งค่าแถวหัวตาราง
     sheet.setRowHeight(1, 60);
@@ -311,7 +558,45 @@ function setupHeaders() {
 }
 
 // ==========================================
-// 4. Function ทดสอบการสร้าง Certificate
+// 5. Function ทดสอบการส่งอีเมล
+// ==========================================
+function testEmailSending() {
+  console.log('=== Testing Email Sending ===');
+  
+  try {
+    // ใส่อีเมลทดสอบที่นี่
+    const testEmail = 'natthasath.sak@nida.ac.th'; // เปลี่ยนเป็นอีเมลของคุณเพื่อทดสอบ
+    const testName = 'นายทดสอบ ระบบ';
+    const testCourseTitle = 'หลักสูตรทดสอบการส่งอีเมล';
+    const testCourseDate = '1 มกราคม 2568';
+    const testCertUrl = 'https://drive.google.com/file/d/1VwqnqQCDAPFk5Ciyh7rNS7u0RKRG7jaf/view?usp=drive_link';
+    const testDownloadUrl = 'https://drive.google.com/uc?export=download&id=test123';
+    
+    // สร้างไฟล์ทดสอบ
+    const testBlob = Utilities.newBlob('Test Certificate Content', 'text/plain', 'test_certificate.txt');
+    
+    // ส่งอีเมลทดสอบ
+    sendCertificateEmail(
+      testEmail,
+      testName,
+      testCourseTitle,
+      testCourseDate,
+      testCertUrl,
+      testDownloadUrl,
+      testBlob
+    );
+    
+    console.log('✅ Test email sent successfully to:', testEmail);
+    return true;
+    
+  } catch (error) {
+    console.error('❌ Email test failed:', error);
+    return false;
+  }
+}
+
+// ==========================================
+// 6. Function ทดสอบการสร้าง Certificate
 // ==========================================
 function testCertificateSave() {
   console.log('=== Testing Certificate Save ===');
@@ -345,10 +630,10 @@ function testCertificateSave() {
 }
 
 // ==========================================
-// 5. Function ทดสอบการส่งข้อมูลพร้อม Certificate
+// 7. Function ทดสอบการส่งข้อมูลพร้อม Certificate และ Email
 // ==========================================
-function testDoPostWithCertificate() {
-  console.log('=== Starting Test with Certificate ===');
+function testDoPostWithCertificateAndEmail() {
+  console.log('=== Starting Test with Certificate and Email ===');
   
   // สร้าง base64 string ทดสอบ (1x1 pixel PNG)
   const testImageBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
@@ -358,7 +643,7 @@ function testDoPostWithCertificate() {
       contents: JSON.stringify({
         title: 'นาย',
         fullname: 'ทดสอบ ระบบ',
-        email: 'test@example.com',
+        email: 'natthasath.sak@nida.ac.th', // เปลี่ยนเป็นอีเมลของคุณเพื่อทดสอบ
         organization: 'หน่วยงานทดสอบ',
         q1_1: '5',
         q1_2: '4',
@@ -391,6 +676,7 @@ function testDoPostWithCertificate() {
       console.log('✅ Test PASSED - Data saved to row:', parsed.row);
       console.log('Certificate saved:', parsed.data_received.certificate_saved);
       console.log('Certificate URL:', parsed.data_received.certificate_url);
+      console.log('Email sent:', parsed.data_received.email_sent);
     } else {
       console.log('❌ Test FAILED:', parsed.error);
     }
@@ -402,7 +688,7 @@ function testDoPostWithCertificate() {
 }
 
 // ==========================================
-// 6. Function ตรวจสอบการเชื่อมต่อ
+// 8. Function ตรวจสอบการเชื่อมต่อ
 // ==========================================
 function testConnection() {
   try {
@@ -429,6 +715,11 @@ function testConnection() {
       console.log('A new folder will be created when needed');
     }
     
+    // ทดสอบ Email quota
+    console.log('\nChecking email quota...');
+    const emailQuotaRemaining = MailApp.getRemainingDailyQuota();
+    console.log('📧 Remaining email quota for today:', emailQuotaRemaining);
+    
     return true;
   } catch (error) {
     console.error('❌ Connection failed:', error.message);
@@ -437,7 +728,7 @@ function testConnection() {
 }
 
 // ==========================================
-// 7. Function ดูข้อมูลล่าสุด
+// 9. Function ดูข้อมูลล่าสุด
 // ==========================================
 function viewLatestData() {
   try {
@@ -477,7 +768,7 @@ function viewLatestData() {
 }
 
 // ==========================================
-// 8. Function ดู Certificate ที่บันทึกไว้
+// 10. Function ดู Certificate ที่บันทึกไว้
 // ==========================================
 function listCertificates() {
   try {
@@ -509,7 +800,72 @@ function listCertificates() {
 }
 
 // ==========================================
-// 9. Function ล้างข้อมูลทดสอบ (ระวังใช้!)
+// 11. Function ส่งอีเมล Certificate ซ้ำ (Manual)
+// ==========================================
+function resendCertificateEmail(email) {
+  try {
+    console.log('=== Resending Certificate Email ===');
+    console.log('To:', email);
+    
+    // หา Certificate ในโฟลเดอร์
+    const folder = getCertificateFolder();
+    const fileName = `${email}.png`;
+    const files = folder.getFilesByName(fileName);
+    
+    if (!files.hasNext()) {
+      console.error('Certificate not found for:', email);
+      return false;
+    }
+    
+    const file = files.next();
+    const certificateUrl = file.getUrl();
+    const certificateDownloadUrl = `https://drive.google.com/uc?export=download&id=${file.getId()}`;
+    
+    // หาข้อมูลจาก Sheet
+    const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sheet = spreadsheet.getActiveSheet();
+    const data = sheet.getDataRange().getValues();
+    
+    // หาแถวที่มี email ตรงกัน (คอลัมน์ D = index 3)
+    let userData = null;
+    for (let i = 1; i < data.length; i++) { // เริ่มจาก 1 เพื่อข้าม header
+      if (data[i][3] === email) { // คอลัมน์ D = อีเมล
+        userData = {
+          fullName: data[i][18] || data[i][2], // คอลัมน์ S หรือ C
+          courseTitle: data[i][16] || 'รายงานการประชุมยุคใหม่ สั่งได้ด้วย AI & MS Teams', // คอลัมน์ Q
+          courseDate: data[i][17] || '6 สิงหาคม 2568' // คอลัมน์ R
+        };
+        break;
+      }
+    }
+    
+    if (!userData) {
+      console.error('User data not found for:', email);
+      return false;
+    }
+    
+    // ส่งอีเมล
+    sendCertificateEmail(
+      email,
+      userData.fullName,
+      userData.courseTitle,
+      userData.courseDate,
+      certificateUrl,
+      certificateDownloadUrl,
+      file
+    );
+    
+    console.log('✅ Certificate email resent successfully');
+    return true;
+    
+  } catch (error) {
+    console.error('Error resending certificate email:', error);
+    return false;
+  }
+}
+
+// ==========================================
+// 12. Function ล้างข้อมูลทดสอบ (ระวังใช้!)
 // ==========================================
 function clearTestData() {
   const response = Browser.msgBox(
