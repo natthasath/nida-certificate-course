@@ -507,7 +507,11 @@
     
     <script>
         // *** ใส่ URL ของ Google Apps Script ที่นี่ ***
-        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxEQWHlibWcC0oshqSS0oz67B2ViNG_yTFaYPOvDmznzW25XQi_pyStba_PmdeVudMSNA/exec';
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnQWYMYFY9YWpqaED4nR3kjL_27ot9GGwJ30rdIbOc98PggycsIblyQb3YsAvcz9cGPg/exec';
+        
+        // Global variable to store certificate base64
+        let certificateBase64 = null;
+        let currentEmail = null;
         
         // Form submission
         document.getElementById('surveyForm').addEventListener('submit', async (e) => {
@@ -520,6 +524,9 @@
                 alert('กรุณาเลือกคำนำหน้าชื่อ');
                 return;
             }
+            
+            // Store email for later use
+            currentEmail = document.getElementById('email').value;
             
             // Combine title and name
             const fullNameWithTitle = title.value + fullname;
@@ -550,11 +557,14 @@
             document.getElementById('loadingOverlay').style.display = 'flex';
             document.getElementById('submitBtn').disabled = true;
             
-            // Collect form data
+            // Generate certificate first and get base64
+            await generateCertificate(fullNameWithTitle);
+            
+            // Collect form data with certificate
             const formData = {
                 title: title.value,
                 fullname: fullname,
-                email: document.getElementById('email').value,
+                email: currentEmail,
                 organization: document.getElementById('organization').value,
                 q1_1: document.querySelector('input[name="q1_1"]:checked').value,
                 q1_2: document.querySelector('input[name="q1_2"]:checked').value,
@@ -569,7 +579,8 @@
                 suggestions: document.getElementById('suggestions').value,
                 fullnameWithTitle: fullNameWithTitle,
                 courseTitle: 'รายงานการประชุมยุคใหม่ สั่งได้ด้วย AI & MS Teams',
-                courseDate: '6 สิงหาคม 2568'
+                courseDate: '6 สิงหาคม 2568',
+                certificateImage: certificateBase64 // Add certificate base64
             };
             
             try {
@@ -591,7 +602,7 @@
                 document.getElementById('submitBtn').disabled = false;
                 
                 // Show success message
-                alert('ส่งแบบประเมินเรียบร้อยแล้ว ขอบคุณสำหรับความคิดเห็นของท่าน');
+                alert('ส่งแบบประเมินและบันทึก Certificate เรียบร้อยแล้ว\nขอบคุณสำหรับความคิดเห็นของท่าน');
                 
                 // Show certificate
                 showCertificate(fullNameWithTitle);
@@ -607,10 +618,84 @@
             }
         });
         
-        async function showCertificate(name) {
-            // Load SVG file
+        async function generateCertificate(name) {
             try {
+                // Load SVG file
                 const response = await fetch('../templates/certificate-02.svg');
+                const svgText = await response.text();
+                
+                // Create a temporary div to hold the SVG
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = svgText;
+                
+                // Update name in SVG
+                const nameElement = tempDiv.querySelector('#name');
+                if (nameElement) {
+                    nameElement.textContent = name;
+                }
+                
+                // Get the modified SVG
+                const svgElement = tempDiv.querySelector('svg');
+                const svgString = new XMLSerializer().serializeToString(svgElement);
+                
+                // Create canvas
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Set canvas size
+                canvas.width = 2000;
+                canvas.height = 1414;
+                
+                // Create image from SVG
+                const img = new Image();
+                const blob = new Blob([svgString], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(blob);
+                
+                return new Promise((resolve, reject) => {
+                    img.onload = function() {
+                        // Fill white background
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        
+                        // Calculate scaling
+                        const svgWidth = img.width || 1920;
+                        const svgHeight = img.height || 1080;
+                        const scale = Math.min(canvas.width / svgWidth, canvas.height / svgHeight);
+                        
+                        // Calculate position to center
+                        const scaledWidth = svgWidth * scale;
+                        const scaledHeight = svgHeight * scale;
+                        const x = (canvas.width - scaledWidth) / 2;
+                        const y = (canvas.height - scaledHeight) / 2;
+                        
+                        // Draw image
+                        ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
+                        
+                        // Convert to base64
+                        certificateBase64 = canvas.toDataURL('image/png').split(',')[1];
+                        
+                        // Clean up
+                        URL.revokeObjectURL(url);
+                        resolve();
+                    };
+                    
+                    img.onerror = function() {
+                        URL.revokeObjectURL(url);
+                        reject(new Error('Failed to generate certificate'));
+                    };
+                    
+                    img.src = url;
+                });
+            } catch (error) {
+                console.error('Error generating certificate:', error);
+                throw error;
+            }
+        }
+        
+        async function showCertificate(name) {
+            // Load SVG file for display
+            try {
+                const response = await fetch('../templates/certificate-01.svg');
                 const svgText = await response.text();
                 
                 // Insert SVG into container
@@ -642,73 +727,25 @@
         }
         
         async function downloadCertificate() {
-            const svgElement = document.querySelector('#certificate-svg-container svg');
-            
-            if (!svgElement) {
-                alert('ไม่พบ Certificate');
+            if (!certificateBase64 || !currentEmail) {
+                alert('กรุณาส่งแบบประเมินก่อนดาวน์โหลด Certificate');
                 return;
             }
             
-            // Clone SVG to avoid modifying the original
-            const clonedSvg = svgElement.cloneNode(true);
+            // Convert base64 to blob
+            const byteCharacters = atob(certificateBase64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'image/png' });
             
-            // Get SVG string
-            const svgString = new XMLSerializer().serializeToString(clonedSvg);
-            
-            // Create canvas with specific size
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            // Set canvas size to 2000 x 1414 (A4 ratio)
-            canvas.width = 2000;
-            canvas.height = 1414;
-            
-            // Create image from SVG
-            const img = new Image();
-            const blob = new Blob([svgString], { type: 'image/svg+xml' });
-            const url = URL.createObjectURL(blob);
-            
-            img.onload = function() {
-                // Fill white background
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                // Calculate scaling to fit the canvas while maintaining aspect ratio
-                const svgWidth = img.width || 1920;
-                const svgHeight = img.height || 1080;
-                const scale = Math.min(canvas.width / svgWidth, canvas.height / svgHeight);
-                
-                // Calculate position to center the image
-                const scaledWidth = svgWidth * scale;
-                const scaledHeight = svgHeight * scale;
-                const x = (canvas.width - scaledWidth) / 2;
-                const y = (canvas.height - scaledHeight) / 2;
-                
-                // Draw image centered and scaled
-                ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
-                
-                // Download as PNG with high quality
-                canvas.toBlob(function(blob) {
-                    const link = document.createElement('a');
-                    // Get email from form
-                    const email = document.getElementById('email').value;
-                    // Remove @ and . from email for filename
-                    const emailFilename = email.replace('@', '_at_').replace(/\./g, '_');
-                    link.download = `${email}.png`;
-                    link.href = URL.createObjectURL(blob);
-                    link.click();
-                    
-                    // Clean up
-                    URL.revokeObjectURL(url);
-                }, 'image/png', 1.0); // 1.0 = highest quality
-            };
-            
-            img.onerror = function() {
-                alert('เกิดข้อผิดพลาดในการสร้างรูปภาพ กรุณาลองใหม่อีกครั้ง');
-                URL.revokeObjectURL(url);
-            };
-            
-            img.src = url;
+            // Download
+            const link = document.createElement('a');
+            link.download = `${currentEmail}.png`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
         }
         
         // Close certificate on background click
