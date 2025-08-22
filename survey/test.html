@@ -4,179 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แบบประเมินหลักสูตร Elevate Your Work with AI รุ่นที่ 1 ในหัวข้อ "รายงานการประชุมยุคใหม่ สั่งได้ด้วย AI & MS Teams"</title>
-    <link rel="stylesheet" href="../css/style-01.css">
-    <style>
-        /* Custom Modal Styles */
-        .custom-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 10000;
-            backdrop-filter: blur(4px);
-            animation: modalFadeIn 0.3s ease-out;
-        }
-
-        .custom-modal.show {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 450px;
-            width: 90%;
-            text-align: center;
-            transform: scale(0.8);
-            animation: modalSlideIn 0.3s ease-out forwards;
-            position: relative;
-        }
-
-        .modal-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .modal-icon.success {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-        }
-
-        .modal-icon.error {
-            background: linear-gradient(135deg, #f44336, #da190b);
-            color: white;
-        }
-
-        .modal-icon.warning {
-            background: linear-gradient(135deg, #ff9800, #f57c00);
-            color: white;
-        }
-
-        .modal-icon.info {
-            background: linear-gradient(135deg, #2196F3, #1976D2);
-            color: white;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #333;
-        }
-
-        .modal-message {
-            font-size: 16px;
-            line-height: 1.5;
-            color: #666;
-            margin-bottom: 24px;
-            white-space: pre-line;
-        }
-
-        .modal-button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 100px;
-        }
-
-        .modal-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .modal-button:active {
-            transform: translateY(0);
-        }
-
-        @keyframes modalFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: scale(0.8) translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: #999;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.2s ease;
-        }
-
-        .modal-close:hover {
-            background: #f5f5f5;
-            color: #666;
-        }
-
-        /* Responsive */
-        @media (max-width: 480px) {
-            .modal-content {
-                padding: 24px;
-                margin: 20px;
-            }
-            
-            .modal-icon {
-                width: 56px;
-                height: 56px;
-                font-size: 24px;
-            }
-            
-            .modal-title {
-                font-size: 18px;
-            }
-            
-            .modal-message {
-                font-size: 15px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="../css/test.css">
 </head>
 <body>
     <div class="container">
         <div class="header">
+            <h1>ทดสอบ</h1>
             <h1>แบบประเมินหลักสูตร Elevate Your Work with AI รุ่นที่ 1 <br> ในหัวข้อ "รายงานการประชุมยุคใหม่ สั่งได้ด้วย AI & MS Teams"</h1>
             <div class="event-info">
-                วันที่ 6 สิงหาคม 2568<br>
-                เวลา 13.00 – 16.30 น.<br>
+                วันที่ xx มกราคม 2568<br>
+                เวลา 08.30 – 16.30 น.<br>
                 ณ ห้องปฏิบัติการคอมพิวเตอร์ 2 ชั้น 9 อาคารสยามบรมราชกุมารี<br>
                 สถาบันบัณฑิตพัฒนบริหารศาสตร์
             </div>
@@ -677,16 +514,49 @@
         <div class="certificate" id="certificate">
             <div id="certificate-svg-container"></div>
         </div>
-        <button class="download-btn" onclick="downloadCertificate()">ดาวน์โหลด Certificate</button>
+        <div class="certificate-actions">
+            <button class="download-btn" onclick="saveCertificate()">
+                <span id="downloadBtnText">ดู/บันทึก Certificate</span>
+            </button>
+            <div class="ios-instruction" id="iosInstruction">
+                <span class="icon">💡</span>
+                <strong>วิธีบันทึกรูป:</strong> กดค้างที่รูป Certificate ด้านบน → เลือก "Save Image" หรือ "บันทึกรูปภาพ"
+            </div>
+        </div>
     </div>
     
     <script>
         // *** ใส่ URL ของ Google Apps Script ที่นี่ ***
         const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwVQBbp5oRGo4u69YPrk0yzJBvATMz5M-FrWAI3vG3RQxqAiN5zxLycwRgIG8c7tdAdZg/exec';
         
-        // Global variable to store certificate base64
+        // Global variables
         let certificateBase64 = null;
         let currentEmail = null;
+        let currentFullName = null;
+        
+        // Device detection
+        function detectDevice() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            
+            // Check if iOS
+            const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+            
+            // Check if Android
+            const isAndroid = /android/i.test(userAgent);
+            
+            // Check if in-app browser
+            const isInAppBrowser = /Line|FB|FBAV|Instagram|WebView|wv/.test(userAgent) ||
+                                  (userAgent.includes('Mobile') && !userAgent.includes('Safari')) ||
+                                  userAgent.includes('MicroMessenger');
+            
+            return {
+                isIOS: isIOS,
+                isAndroid: isAndroid,
+                isInAppBrowser: isInAppBrowser,
+                isMobile: isIOS || isAndroid,
+                isDesktop: !isIOS && !isAndroid
+            };
+        }
         
         // Custom Modal Functions
         function showModal(type, title, message) {
@@ -708,7 +578,7 @@
                     icon.innerHTML = '⚠';
                     break;
                 case 'info':
-                    icon.innerHTML = 'ⓘ';
+                    icon.innerHTML = 'ℹ';
                     break;
             }
             
@@ -742,11 +612,9 @@
                 return;
             }
             
-            // Store email for later use
+            // Store for later use
             currentEmail = document.getElementById('email').value;
-            
-            // Combine title and name
-            const fullNameWithTitle = title.value + fullname;
+            currentFullName = title.value + fullname;
             
             // Validate all required fields
             const requiredFields = [
@@ -775,7 +643,7 @@
             document.getElementById('submitBtn').disabled = true;
             
             // Generate certificate first and get base64
-            await generateCertificate(fullNameWithTitle);
+            await generateCertificate(currentFullName);
             
             // Collect form data with certificate
             const formData = {
@@ -794,40 +662,42 @@
                 q4_1: document.querySelector('input[name="q4_1"]:checked').value,
                 q4_2: document.querySelector('input[name="q4_2"]:checked').value,
                 suggestions: document.getElementById('suggestions').value,
-                fullnameWithTitle: fullNameWithTitle,
+                fullnameWithTitle: currentFullName,
                 courseTitle: 'รายงานการประชุมยุคใหม่ สั่งได้ด้วย AI & MS Teams',
                 courseDate: '6 สิงหาคม 2568',
-                certificateImage: certificateBase64 // Add certificate base64
+                certificateImage: certificateBase64
             };
             
             try {
                 // Send data to Google Apps Script
                 const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'no-cors', // Important for CORS
+                    mode: 'no-cors',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(formData)
                 });
                 
-                // Since we're using no-cors, we can't read the response
-                // But if the request goes through, we assume success
-                
                 // Hide loading
                 document.getElementById('loadingOverlay').style.display = 'none';
                 document.getElementById('submitBtn').disabled = false;
                 
+                // Device specific message
+                const device = detectDevice();
+                let successMessage = 'ส่งแบบประเมินและบันทึก Certificate เรียบร้อยแล้ว\nขอบคุณสำหรับความคิดเห็นของท่าน';
+                
+                if (device.isIOS || device.isInAppBrowser) {
+                    successMessage += '\n\nคุณสามารถบันทึก Certificate ได้ในหน้าถัดไป';
+                }
+                
                 // Show success message
-                showModal('success', 'ส่งข้อมูลสำเร็จ', 'ส่งแบบประเมินและบันทึก Certificate เรียบร้อยแล้ว\nขอบคุณสำหรับความคิดเห็นของท่าน');
+                showModal('success', 'ส่งข้อมูลสำเร็จ', successMessage);
                 
                 // Show certificate after modal closes
                 setTimeout(() => {
-                    showCertificate(fullNameWithTitle);
+                    showCertificate(currentFullName);
                 }, 2000);
-                
-                // Optional: Reset form
-                // document.getElementById('surveyForm').reset();
                 
             } catch (error) {
                 console.error('Error:', error);
@@ -912,7 +782,6 @@
         }
         
         async function showCertificate(name) {
-            // Load SVG file for display
             try {
                 const response = await fetch('../templates/certificate-01.svg');
                 const svgText = await response.text();
@@ -926,7 +795,21 @@
                     nameElement.textContent = name;
                 }
                 
-                // Show certificate container with flex display
+                // Show appropriate instructions based on device
+                const device = detectDevice();
+                const downloadBtn = document.getElementById('downloadBtnText');
+                const iosInstruction = document.getElementById('iosInstruction');
+                
+                if (device.isIOS || device.isInAppBrowser) {
+                    downloadBtn.textContent = 'เปิด Certificate ในหน้าใหม่';
+                    if (device.isIOS) {
+                        iosInstruction.classList.add('show');
+                    }
+                } else {
+                    downloadBtn.textContent = 'ดาวน์โหลด Certificate';
+                }
+                
+                // Show certificate container
                 const container = document.getElementById('certificate-container');
                 container.classList.add('show');
                 
@@ -945,11 +828,13 @@
             container.classList.remove('show');
         }
         
-        /* async function downloadCertificate() {
+        async function saveCertificate() {
             if (!certificateBase64 || !currentEmail) {
-                showModal('warning', 'ไม่สามารถดาวน์โหลดได้', 'กรุณาส่งแบบประเมินก่อนดาวน์โหลด Certificate');
+                showModal('warning', 'ไม่สามารถดำเนินการได้', 'กรุณาส่งแบบประเมินก่อนบันทึก Certificate');
                 return;
             }
+            
+            const device = detectDevice();
             
             // Convert base64 to blob
             const byteCharacters = atob(certificateBase64);
@@ -960,249 +845,101 @@
             const byteArray = new Uint8Array(byteNumbers);
             const blob = new Blob([byteArray], { type: 'image/png' });
             
-            // Download
-            const link = document.createElement('a');
-            link.download = `${currentEmail}.png`;
-            link.href = URL.createObjectURL(blob);
-            link.click();
-        } */
-
-        async function downloadCertificate() {
-            // ตรวจสอบว่ามี certificate และ email หรือไม่
-            if (!certificateBase64 || !currentEmail) {
-                showModal('warning', 'ไม่สามารถดาวน์โหลดได้', 'กรุณาส่งแบบประเมินก่อนดาวน์โหลด Certificate');
-                return;
-            }
-            
-            // ตรวจสอบว่าเป็น Mobile Device หรือไม่
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            
-            // ตรวจสอบว่าเป็น In-App Browser หรือไม่
-            const isInAppBrowser = /FBAN|FBAV|Instagram|Line|Twitter/i.test(navigator.userAgent) ||
-                                (navigator.userAgent.includes('wv')) || // Android WebView
-                                (window.navigator.standalone === true); // iOS standalone
-            
-            // ตรวจสอบว่าเป็น iOS Safari หรือไม่
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-            
-            try {
-                if (isMobile || isInAppBrowser || (isIOS && isSafari)) {
-                    // === Mobile & In-App Browser Solution ===
-                    // เปิดรูปใน Tab ใหม่แทนการ Download
-                    
-                    // สร้าง Data URL จาก base64
-                    const dataURL = 'data:image/png;base64,' + certificateBase64;
-                    
-                    // เปิดในหน้าต่างใหม่
-                    const newWindow = window.open(dataURL, '_blank');
-                    
-                    // ตรวจสอบว่าเปิดได้หรือไม่ (อาจโดน popup blocker)
-                    if (!newWindow) {
-                        // ถ้าโดน block ให้สร้างปุ่มชั่วคราวให้ user กดเอง
-                        showAlternativeDownload(dataURL);
-                    } else {
-                        // แสดงคำแนะนำให้ user
-                        let instructionMessage = '';
-                        
-                        if (isIOS) {
-                            instructionMessage = 'รูป Certificate เปิดในแท็บใหม่แล้ว\n\n📱 วิธีบันทึก:\n1. กดค้างที่รูปภาพ\n2. เลือก "บันทึกรูปภาพ" หรือ "Save Image"';
-                        } else if (/Android/i.test(navigator.userAgent)) {
-                            instructionMessage = 'รูป Certificate เปิดในแท็บใหม่แล้ว\n\n📱 วิธีบันทึก:\n1. กดค้างที่รูปภาพ\n2. เลือก "ดาวน์โหลดรูปภาพ" หรือ "Download image"';
-                        } else {
-                            instructionMessage = 'รูป Certificate เปิดในแท็บใหม่แล้ว\n\n📱 วิธีบันทึก:\nกดค้างที่รูปภาพแล้วเลือกบันทึก';
-                        }
-                        
-                        // แสดง Modal พร้อมคำแนะนำ
-                        showModal('info', 'เปิด Certificate สำเร็จ', instructionMessage);
-                    }
-                    
-                } else {
-                    // === Desktop Solution ===
-                    // ใช้วิธี Download แบบเดิมสำหรับ Desktop
-                    
-                    // แปลง base64 เป็น blob
-                    const byteCharacters = atob(certificateBase64);
-                    const byteNumbers = new Array(byteCharacters.length);
-                    for (let i = 0; i < byteCharacters.length; i++) {
-                        byteNumbers[i] = byteCharacters.charCodeAt(i);
-                    }
-                    const byteArray = new Uint8Array(byteNumbers);
-                    const blob = new Blob([byteArray], { type: 'image/png' });
-                    
-                    // สร้าง download link
-                    const link = document.createElement('a');
-                    link.download = `${currentEmail}.png`;
-                    link.href = URL.createObjectURL(blob);
-                    
-                    // ทริกเกอร์การ download
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    
-                    // แสดงข้อความสำเร็จ
-                    showModal('success', 'ดาวน์โหลดสำเร็จ', 'ไฟล์ Certificate ถูกบันทึกในโฟลเดอร์ Downloads แล้ว');
-                    
-                    // ล้าง object URL
-                    setTimeout(() => URL.revokeObjectURL(link.href), 100);
-                }
-                
-            } catch (error) {
-                console.error('Error downloading certificate:', error);
-                
-                // Fallback: แสดงรูปในหน้าเดิม
-                showCertificateInPage();
-            }
-        }
-
-        // ฟังก์ชันเสริม: แสดงปุ่ม download สำรองเมื่อโดน popup blocker
-        function showAlternativeDownload(dataURL) {
-            // สร้าง modal พิเศษสำหรับ download
-            const modalHTML = `
-                <div id="downloadModal" style="
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0, 0, 0, 0.8);
-                    z-index: 10001;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                ">
-                    <div style="
-                        background: white;
-                        padding: 30px;
-                        border-radius: 16px;
-                        max-width: 90%;
-                        text-align: center;
-                    ">
-                        <h3 style="margin-bottom: 20px; color: #333;">
-                            ⚠️ ไม่สามารถเปิดหน้าต่างใหม่ได้
-                        </h3>
-                        <p style="margin-bottom: 20px; color: #666; line-height: 1.6;">
-                            เบราว์เซอร์ของคุณอาจบล็อกการเปิดหน้าต่างใหม่<br>
-                            กรุณากดปุ่มด้านล่างเพื่อดู Certificate
-                        </p>
-                        <button onclick="openCertificateManual('${dataURL}')" style="
-                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                            color: white;
-                            border: none;
-                            padding: 12px 30px;
-                            border-radius: 8px;
-                            font-size: 16px;
-                            cursor: pointer;
-                            margin: 5px;
-                        ">
-                            📱 เปิด Certificate
-                        </button>
-                        <button onclick="closeDownloadModal()" style="
-                            background: #e0e0e0;
-                            color: #333;
-                            border: none;
-                            padding: 12px 30px;
-                            border-radius: 8px;
-                            font-size: 16px;
-                            cursor: pointer;
-                            margin: 5px;
-                        ">
-                            ยกเลิก
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            // เพิ่ม modal ลงใน body
-            document.body.insertAdjacentHTML('beforeend', modalHTML);
-        }
-
-        // ฟังก์ชันเปิด Certificate แบบ manual
-        function openCertificateManual(dataURL) {
-            window.location.href = dataURL;
-            closeDownloadModal();
-            
-            // แสดงคำแนะนำ
-            setTimeout(() => {
-                showModal('info', 'วิธีบันทึก Certificate', 
-                        '📱 กดค้างที่รูปภาพ\n📥 เลือก "บันทึกรูปภาพ" หรือ "Save Image"');
-            }, 500);
-        }
-
-        // ฟังก์ชันปิด download modal
-        function closeDownloadModal() {
-            const modal = document.getElementById('downloadModal');
-            if (modal) {
-                modal.remove();
-            }
-        }
-
-        // ฟังก์ชัน Fallback: แสดง Certificate ในหน้าเดิม
-        function showCertificateInPage() {
-            // สร้าง Data URL
+            // Create data URL for opening in new tab
             const dataURL = 'data:image/png;base64,' + certificateBase64;
             
-            // สร้าง modal แสดงรูป
-            const imageModal = `
-                <div id="certificateImageModal" style="
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0, 0, 0, 0.9);
-                    z-index: 10002;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    padding: 20px;
-                ">
-                    <div style="
-                        background: white;
-                        padding: 10px;
-                        border-radius: 8px;
-                        margin-bottom: 20px;
-                    ">
-                        <p style="margin: 0; color: #333;">
-                            💡 กดค้างที่รูปเพื่อบันทึก
-                        </p>
-                    </div>
-                    <img src="${dataURL}" style="
-                        max-width: 100%;
-                        max-height: 70vh;
-                        border-radius: 8px;
-                        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-                    " alt="Certificate">
-                    <button onclick="closeCertificateImage()" style="
-                        margin-top: 20px;
-                        background: white;
-                        color: #333;
-                        border: none;
-                        padding: 12px 30px;
-                        border-radius: 8px;
-                        font-size: 16px;
-                        cursor: pointer;
-                    ">
-                        ปิด
-                    </button>
-                </div>
-            `;
-            
-            document.body.insertAdjacentHTML('beforeend', imageModal);
-        }
-
-        // ฟังก์ชันปิด certificate image modal
-        function closeCertificateImage() {
-            const modal = document.getElementById('certificateImageModal');
-            if (modal) {
-                modal.remove();
+            if (device.isIOS || device.isInAppBrowser) {
+                // For iOS and in-app browsers: Open in new tab/window
+                const newWindow = window.open();
+                if (newWindow) {
+                    newWindow.document.write(`
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <title>Certificate - ${currentFullName}</title>
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <style>
+                                body {
+                                    margin: 0;
+                                    padding: 20px;
+                                    background: #f5f5f5;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    min-height: 100vh;
+                                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                                }
+                                .container {
+                                    text-align: center;
+                                    background: white;
+                                    padding: 20px;
+                                    border-radius: 12px;
+                                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                                }
+                                img {
+                                    max-width: 100%;
+                                    height: auto;
+                                    border-radius: 8px;
+                                    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                                }
+                                .instructions {
+                                    margin-top: 20px;
+                                    padding: 15px;
+                                    background: #f0f4ff;
+                                    border-radius: 8px;
+                                    color: #333;
+                                    font-size: 14px;
+                                    line-height: 1.6;
+                                }
+                                .instructions strong {
+                                    color: #667eea;
+                                }
+                                h2 {
+                                    color: #333;
+                                    margin-bottom: 20px;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="container">
+                                <h2>Certificate ของคุณ</h2>
+                                <img src="${dataURL}" alt="Certificate">
+                                <div class="instructions">
+                                    <strong>วิธีบันทึกรูป:</strong><br>
+                                    กดค้างที่รูป Certificate ด้านบน<br>
+                                    → เลือก "Save Image" หรือ "บันทึกรูปภาพ"<br>
+                                    → รูปจะถูกบันทึกในอัลบั้มรูปภาพของคุณ
+                                </div>
+                            </div>
+                        </body>
+                        </html>
+                    `);
+                    newWindow.document.close();
+                } else {
+                    // Fallback if popup blocked
+                    showModal('info', 'คำแนะนำ', 'กรุณาอนุญาต Pop-up ในเบราว์เซอร์\nหรือกดค้างที่รูป Certificate ด้านบน\nแล้วเลือก "Save Image"');
+                }
+            } else {
+                // For desktop and Android: Download directly
+                const link = document.createElement('a');
+                link.download = `certificate_${currentEmail}.png`;
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                URL.revokeObjectURL(link.href);
             }
         }
         
         // Close certificate on background click
         document.getElementById('certificate-container').addEventListener('click', (e) => {
             if (e.target.id === 'certificate-container') {
+                closeCertificate();
+            }
+        });
+        
+        // Add keyboard support for closing modals
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
                 closeCertificate();
             }
         });
