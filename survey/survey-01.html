@@ -5,6 +5,170 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>แบบประเมินหลักสูตร Elevate Your Work with AI รุ่นที่ 1 ในหัวข้อ "รายงานการประชุมยุคใหม่ สั่งได้ด้วย AI & MS Teams"</title>
     <link rel="stylesheet" href="../css/style-01.css">
+    <style>
+        /* Custom Modal Styles */
+        .custom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 10000;
+            backdrop-filter: blur(4px);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        .custom-modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            transform: scale(0.8);
+            animation: modalSlideIn 0.3s ease-out forwards;
+            position: relative;
+        }
+
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .modal-icon.success {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .modal-icon.error {
+            background: linear-gradient(135deg, #f44336, #da190b);
+            color: white;
+        }
+
+        .modal-icon.warning {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+        }
+
+        .modal-icon.info {
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+            color: white;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .modal-message {
+            font-size: 16px;
+            line-height: 1.5;
+            color: #666;
+            margin-bottom: 24px;
+            white-space: pre-line;
+        }
+
+        .modal-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+
+        .modal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .modal-button:active {
+            transform: translateY(0);
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .modal-content {
+                padding: 24px;
+                margin: 20px;
+            }
+            
+            .modal-icon {
+                width: 56px;
+                height: 56px;
+                font-size: 24px;
+            }
+            
+            .modal-title {
+                font-size: 18px;
+            }
+            
+            .modal-message {
+                font-size: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -497,6 +661,17 @@
         </div>
     </div>
     
+    <!-- Custom Modal -->
+    <div id="customModal" class="custom-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div id="modalIcon" class="modal-icon"></div>
+            <div id="modalTitle" class="modal-title"></div>
+            <div id="modalMessage" class="modal-message"></div>
+            <button class="modal-button" onclick="closeModal()">ตกลง</button>
+        </div>
+    </div>
+    
     <div id="certificate-container">
         <button class="close-btn" onclick="closeCertificate()">×</button>
         <div class="certificate" id="certificate">
@@ -507,7 +682,53 @@
     
     <script>
         // *** ใส่ URL ของ Google Apps Script ที่นี่ ***
-        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxEQWHlibWcC0oshqSS0oz67B2ViNG_yTFaYPOvDmznzW25XQi_pyStba_PmdeVudMSNA/exec';
+        const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx7hciVTMgfvq3nd8g11-40AlTdxGx_auFXJWxKt9721pT_4_ZdYQbOBbYht5OUPleh/exec';
+        
+        // Global variable to store certificate base64
+        let certificateBase64 = null;
+        let currentEmail = null;
+        
+        // Custom Modal Functions
+        function showModal(type, title, message) {
+            const modal = document.getElementById('customModal');
+            const icon = document.getElementById('modalIcon');
+            const titleEl = document.getElementById('modalTitle');
+            const messageEl = document.getElementById('modalMessage');
+            
+            // Set icon based on type
+            icon.className = `modal-icon ${type}`;
+            switch(type) {
+                case 'success':
+                    icon.innerHTML = '✓';
+                    break;
+                case 'error':
+                    icon.innerHTML = '✕';
+                    break;
+                case 'warning':
+                    icon.innerHTML = '⚠';
+                    break;
+                case 'info':
+                    icon.innerHTML = 'ⓘ';
+                    break;
+            }
+            
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            
+            modal.classList.add('show');
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('customModal');
+            modal.classList.remove('show');
+        }
+        
+        // Close modal on background click
+        document.getElementById('customModal').addEventListener('click', (e) => {
+            if (e.target.id === 'customModal') {
+                closeModal();
+            }
+        });
         
         // Form submission
         document.getElementById('surveyForm').addEventListener('submit', async (e) => {
@@ -517,9 +738,12 @@
             const fullname = document.getElementById('fullname').value;
             
             if (!title) {
-                alert('กรุณาเลือกคำนำหน้าชื่อ');
+                showModal('warning', 'กรุณาเลือกข้อมูล', 'กรุณาเลือกคำนำหน้าชื่อ');
                 return;
             }
+            
+            // Store email for later use
+            currentEmail = document.getElementById('email').value;
             
             // Combine title and name
             const fullNameWithTitle = title.value + fullname;
@@ -542,7 +766,7 @@
             }
             
             if (!allFieldsValid) {
-                alert('กรุณาตอบคำถามให้ครบทุกข้อ');
+                showModal('warning', 'ข้อมูลไม่ครบถ้วน', 'กรุณาตอบคำถามให้ครบทุกข้อ');
                 return;
             }
             
@@ -550,11 +774,14 @@
             document.getElementById('loadingOverlay').style.display = 'flex';
             document.getElementById('submitBtn').disabled = true;
             
-            // Collect form data
+            // Generate certificate first and get base64
+            await generateCertificate(fullNameWithTitle);
+            
+            // Collect form data with certificate
             const formData = {
                 title: title.value,
                 fullname: fullname,
-                email: document.getElementById('email').value,
+                email: currentEmail,
                 organization: document.getElementById('organization').value,
                 q1_1: document.querySelector('input[name="q1_1"]:checked').value,
                 q1_2: document.querySelector('input[name="q1_2"]:checked').value,
@@ -569,7 +796,8 @@
                 suggestions: document.getElementById('suggestions').value,
                 fullnameWithTitle: fullNameWithTitle,
                 courseTitle: 'รายงานการประชุมยุคใหม่ สั่งได้ด้วย AI & MS Teams',
-                courseDate: '6 สิงหาคม 2568'
+                courseDate: '6 สิงหาคม 2568',
+                certificateImage: certificateBase64 // Add certificate base64
             };
             
             try {
@@ -591,10 +819,12 @@
                 document.getElementById('submitBtn').disabled = false;
                 
                 // Show success message
-                alert('ส่งแบบประเมินเรียบร้อยแล้ว ขอบคุณสำหรับความคิดเห็นของท่าน');
+                showModal('success', 'ส่งข้อมูลสำเร็จ', 'ส่งแบบประเมินและบันทึก Certificate เรียบร้อยแล้ว\nขอบคุณสำหรับความคิดเห็นของท่าน');
                 
-                // Show certificate
-                showCertificate(fullNameWithTitle);
+                // Show certificate after modal closes
+                setTimeout(() => {
+                    showCertificate(fullNameWithTitle);
+                }, 2000);
                 
                 // Optional: Reset form
                 // document.getElementById('surveyForm').reset();
@@ -603,12 +833,86 @@
                 console.error('Error:', error);
                 document.getElementById('loadingOverlay').style.display = 'none';
                 document.getElementById('submitBtn').disabled = false;
-                alert('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง');
+                showModal('error', 'เกิดข้อผิดพลาด', 'เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง');
             }
         });
         
+        async function generateCertificate(name) {
+            try {
+                // Load SVG file
+                const response = await fetch('../templates/certificate-01.svg');
+                const svgText = await response.text();
+                
+                // Create a temporary div to hold the SVG
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = svgText;
+                
+                // Update name in SVG
+                const nameElement = tempDiv.querySelector('#name');
+                if (nameElement) {
+                    nameElement.textContent = name;
+                }
+                
+                // Get the modified SVG
+                const svgElement = tempDiv.querySelector('svg');
+                const svgString = new XMLSerializer().serializeToString(svgElement);
+                
+                // Create canvas
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Set canvas size
+                canvas.width = 2000;
+                canvas.height = 1414;
+                
+                // Create image from SVG
+                const img = new Image();
+                const blob = new Blob([svgString], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(blob);
+                
+                return new Promise((resolve, reject) => {
+                    img.onload = function() {
+                        // Fill white background
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        
+                        // Calculate scaling
+                        const svgWidth = img.width || 1920;
+                        const svgHeight = img.height || 1080;
+                        const scale = Math.min(canvas.width / svgWidth, canvas.height / svgHeight);
+                        
+                        // Calculate position to center
+                        const scaledWidth = svgWidth * scale;
+                        const scaledHeight = svgHeight * scale;
+                        const x = (canvas.width - scaledWidth) / 2;
+                        const y = (canvas.height - scaledHeight) / 2;
+                        
+                        // Draw image
+                        ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
+                        
+                        // Convert to base64
+                        certificateBase64 = canvas.toDataURL('image/png').split(',')[1];
+                        
+                        // Clean up
+                        URL.revokeObjectURL(url);
+                        resolve();
+                    };
+                    
+                    img.onerror = function() {
+                        URL.revokeObjectURL(url);
+                        reject(new Error('Failed to generate certificate'));
+                    };
+                    
+                    img.src = url;
+                });
+            } catch (error) {
+                console.error('Error generating certificate:', error);
+                throw error;
+            }
+        }
+        
         async function showCertificate(name) {
-            // Load SVG file
+            // Load SVG file for display
             try {
                 const response = await fetch('../templates/certificate-01.svg');
                 const svgText = await response.text();
@@ -632,7 +936,7 @@
                 }, 100);
             } catch (error) {
                 console.error('Error loading certificate:', error);
-                alert('ไม่สามารถโหลดไฟล์ certificate.svg ได้ กรุณาตรวจสอบว่าไฟล์อยู่ในโฟลเดอร์เดียวกับ index.html');
+                showModal('error', 'เกิดข้อผิดพลาด', 'ไม่สามารถโหลดไฟล์ certificate.svg ได้\nกรุณาตรวจสอบว่าไฟล์อยู่ในโฟลเดอร์เดียวกับ index.html');
             }
         }
         
@@ -642,73 +946,25 @@
         }
         
         async function downloadCertificate() {
-            const svgElement = document.querySelector('#certificate-svg-container svg');
-            
-            if (!svgElement) {
-                alert('ไม่พบ Certificate');
+            if (!certificateBase64 || !currentEmail) {
+                showModal('warning', 'ไม่สามารถดาวน์โหลดได้', 'กรุณาส่งแบบประเมินก่อนดาวน์โหลด Certificate');
                 return;
             }
             
-            // Clone SVG to avoid modifying the original
-            const clonedSvg = svgElement.cloneNode(true);
+            // Convert base64 to blob
+            const byteCharacters = atob(certificateBase64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'image/png' });
             
-            // Get SVG string
-            const svgString = new XMLSerializer().serializeToString(clonedSvg);
-            
-            // Create canvas with specific size
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            
-            // Set canvas size to 2000 x 1414 (A4 ratio)
-            canvas.width = 2000;
-            canvas.height = 1414;
-            
-            // Create image from SVG
-            const img = new Image();
-            const blob = new Blob([svgString], { type: 'image/svg+xml' });
-            const url = URL.createObjectURL(blob);
-            
-            img.onload = function() {
-                // Fill white background
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                // Calculate scaling to fit the canvas while maintaining aspect ratio
-                const svgWidth = img.width || 1920;
-                const svgHeight = img.height || 1080;
-                const scale = Math.min(canvas.width / svgWidth, canvas.height / svgHeight);
-                
-                // Calculate position to center the image
-                const scaledWidth = svgWidth * scale;
-                const scaledHeight = svgHeight * scale;
-                const x = (canvas.width - scaledWidth) / 2;
-                const y = (canvas.height - scaledHeight) / 2;
-                
-                // Draw image centered and scaled
-                ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
-                
-                // Download as PNG with high quality
-                canvas.toBlob(function(blob) {
-                    const link = document.createElement('a');
-                    // Get email from form
-                    const email = document.getElementById('email').value;
-                    // Remove @ and . from email for filename
-                    const emailFilename = email.replace('@', '_at_').replace(/\./g, '_');
-                    link.download = `${email}.png`;
-                    link.href = URL.createObjectURL(blob);
-                    link.click();
-                    
-                    // Clean up
-                    URL.revokeObjectURL(url);
-                }, 'image/png', 1.0); // 1.0 = highest quality
-            };
-            
-            img.onerror = function() {
-                alert('เกิดข้อผิดพลาดในการสร้างรูปภาพ กรุณาลองใหม่อีกครั้ง');
-                URL.revokeObjectURL(url);
-            };
-            
-            img.src = url;
+            // Download
+            const link = document.createElement('a');
+            link.download = `${currentEmail}.png`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
         }
         
         // Close certificate on background click
