@@ -497,6 +497,17 @@
         </div>
     </div>
     
+    <!-- Custom Modal -->
+    <div id="customModal" class="custom-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div id="modalIcon" class="modal-icon"></div>
+            <div id="modalTitle" class="modal-title"></div>
+            <div id="modalMessage" class="modal-message"></div>
+            <button class="modal-button" onclick="closeModal()">ตกลง</button>
+        </div>
+    </div>
+    
     <div id="certificate-container">
         <button class="close-btn" onclick="closeCertificate()">×</button>
         <div class="certificate" id="certificate">
@@ -513,6 +524,48 @@
         let certificateBase64 = null;
         let currentEmail = null;
         
+        // Custom Modal Functions
+        function showModal(type, title, message) {
+            const modal = document.getElementById('customModal');
+            const icon = document.getElementById('modalIcon');
+            const titleEl = document.getElementById('modalTitle');
+            const messageEl = document.getElementById('modalMessage');
+            
+            // Set icon based on type
+            icon.className = `modal-icon ${type}`;
+            switch(type) {
+                case 'success':
+                    icon.innerHTML = '✓';
+                    break;
+                case 'error':
+                    icon.innerHTML = '✕';
+                    break;
+                case 'warning':
+                    icon.innerHTML = '⚠';
+                    break;
+                case 'info':
+                    icon.innerHTML = 'ⓘ';
+                    break;
+            }
+            
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            
+            modal.classList.add('show');
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('customModal');
+            modal.classList.remove('show');
+        }
+        
+        // Close modal on background click
+        document.getElementById('customModal').addEventListener('click', (e) => {
+            if (e.target.id === 'customModal') {
+                closeModal();
+            }
+        });
+        
         // Form submission
         document.getElementById('surveyForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -521,7 +574,7 @@
             const fullname = document.getElementById('fullname').value;
             
             if (!title) {
-                alert('กรุณาเลือกคำนำหน้าชื่อ');
+                showModal('warning', 'กรุณาเลือกข้อมูล', 'กรุณาเลือกคำนำหน้าชื่อ');
                 return;
             }
             
@@ -549,7 +602,7 @@
             }
             
             if (!allFieldsValid) {
-                alert('กรุณาตอบคำถามให้ครบทุกข้อ');
+                showModal('warning', 'ข้อมูลไม่ครบถ้วน', 'กรุณาตอบคำถามให้ครบทุกข้อ');
                 return;
             }
             
@@ -602,10 +655,12 @@
                 document.getElementById('submitBtn').disabled = false;
                 
                 // Show success message
-                alert('ส่งแบบประเมินและบันทึก Certificate เรียบร้อยแล้ว\nขอบคุณสำหรับความคิดเห็นของท่าน');
+                showModal('success', 'ส่งข้อมูลสำเร็จ', 'ส่งแบบประเมินและบันทึก Certificate เรียบร้อยแล้ว\nขอบคุณสำหรับความคิดเห็นของท่าน');
                 
-                // Show certificate
-                showCertificate(fullNameWithTitle);
+                // Show certificate after modal closes
+                setTimeout(() => {
+                    showCertificate(fullNameWithTitle);
+                }, 2000);
                 
                 // Optional: Reset form
                 // document.getElementById('surveyForm').reset();
@@ -614,7 +669,7 @@
                 console.error('Error:', error);
                 document.getElementById('loadingOverlay').style.display = 'none';
                 document.getElementById('submitBtn').disabled = false;
-                alert('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง');
+                showModal('error', 'เกิดข้อผิดพลาด', 'เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง');
             }
         });
         
@@ -717,7 +772,7 @@
                 }, 100);
             } catch (error) {
                 console.error('Error loading certificate:', error);
-                alert('ไม่สามารถโหลดไฟล์ certificate.svg ได้ กรุณาตรวจสอบว่าไฟล์อยู่ในโฟลเดอร์เดียวกับ index.html');
+                showModal('error', 'เกิดข้อผิดพลาด', 'ไม่สามารถโหลดไฟล์ certificate.svg ได้\nกรุณาตรวจสอบว่าไฟล์อยู่ในโฟลเดอร์เดียวกับ index.html');
             }
         }
         
@@ -728,7 +783,7 @@
         
         async function downloadCertificate() {
             if (!certificateBase64 || !currentEmail) {
-                alert('กรุณาส่งแบบประเมินก่อนดาวน์โหลด Certificate');
+                showModal('warning', 'ไม่สามารถดาวน์โหลดได้', 'กรุณาส่งแบบประเมินก่อนดาวน์โหลด Certificate');
                 return;
             }
             

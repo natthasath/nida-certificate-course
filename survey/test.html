@@ -9,11 +9,10 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>ทดสอบ</h1>
             <h1>แบบประเมินหลักสูตร Elevate Your Work with AI รุ่นที่ 1 <br> ในหัวข้อ "รายงานการประชุมยุคใหม่ สั่งได้ด้วย AI & MS Teams"</h1>
             <div class="event-info">
-                วันที่ xx มกราคม 2568<br>
-                เวลา 08.30 – 16.30 น.<br>
+                วันที่ 6 สิงหาคม 2568<br>
+                เวลา 13.00 – 16.30 น.<br>
                 ณ ห้องปฏิบัติการคอมพิวเตอร์ 2 ชั้น 9 อาคารสยามบรมราชกุมารี<br>
                 สถาบันบัณฑิตพัฒนบริหารศาสตร์
             </div>
@@ -490,37 +489,30 @@
         </form>
     </div>
     
-    <!-- Loading Overlay -->
+    <!-- Loading Overlay ปรับปรุงใหม่ -->
     <div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
-        <div style="background: white; padding: 30px; border-radius: 10px; text-align: center;">
-            <div style="font-size: 18px; margin-bottom: 10px;">กำลังส่งข้อมูล...</div>
-            <div style="font-size: 14px; color: #666;">กรุณารอสักครู่</div>
+        <div style="background: white; padding: 30px; border-radius: 10px; text-align: center; max-width: 400px;">
+            <div style="font-size: 48px; margin-bottom: 15px;">⏳</div>
+            <div style="font-size: 18px; margin-bottom: 10px; font-weight: 600;">กำลังส่งข้อมูลและสร้าง Certificate</div>
+            <div style="font-size: 14px; color: #666; margin-bottom: 20px;">กรุณารอสักครู่...</div>
+            <div id="loadingProgress" style="width: 100%; background: #f0f0f0; border-radius: 10px; overflow: hidden; height: 10px;">
+                <div id="progressBar" style="width: 0%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100%; transition: width 0.5s;"></div>
+            </div>
+            <div id="loadingStatus" style="margin-top: 15px; font-size: 13px; color: #888;">กำลังเตรียมข้อมูล...</div>
         </div>
     </div>
     
-    <!-- Custom Modal -->
-    <div id="customModal" class="custom-modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-            <div id="modalIcon" class="modal-icon"></div>
-            <div id="modalTitle" class="modal-title"></div>
-            <div id="modalMessage" class="modal-message"></div>
-            <button class="modal-button" onclick="closeModal()">ตกลง</button>
-        </div>
-    </div>
-    
-    <div id="certificate-container">
-        <button class="close-btn" onclick="closeCertificate()">×</button>
-        <div class="certificate" id="certificate">
-            <div id="certificate-svg-container"></div>
-        </div>
-        <div class="certificate-actions">
-            <button class="download-btn" onclick="saveCertificate()">
-                <span id="downloadBtnText">ดู/บันทึก Certificate</span>
-            </button>
-            <div class="ios-instruction" id="iosInstruction">
-                <span class="icon">💡</span>
-                <strong>วิธีบันทึกรูป:</strong> กดค้างที่รูป Certificate ด้านบน → เลือก "Save Image" หรือ "บันทึกรูปภาพ"
+    <!-- Success Message Before Redirect -->
+    <div id="successOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10000; justify-content: center; align-items: center;">
+        <div style="background: white; padding: 40px; border-radius: 15px; text-align: center; max-width: 500px;">
+            <div style="font-size: 64px; margin-bottom: 20px;">✅</div>
+            <div style="font-size: 24px; margin-bottom: 15px; font-weight: 600; color: #333;">ส่งแบบประเมินสำเร็จ!</div>
+            <div style="font-size: 16px; color: #666; margin-bottom: 25px;">
+                Certificate ของคุณพร้อมแล้ว<br>
+                กำลังเปิดหน้า Google Drive...
+            </div>
+            <div style="font-size: 14px; color: #999;">
+                หากไม่เปิดอัตโนมัติ <a href="#" id="manualLink" style="color: #667eea; text-decoration: none;">คลิกที่นี่</a>
             </div>
         </div>
     </div>
@@ -532,181 +524,56 @@
         // Global variables
         let certificateBase64 = null;
         let currentEmail = null;
-        let currentFullName = null;
+        let callbackCounter = 0;
         
-        // Device detection
-        function detectDevice() {
-            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        // JSONP Callback function
+        window.handleSurveyResponse = function(response) {
+            console.log('Received response:', response);
             
-            // Check if iOS
-            const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+            // Hide loading
+            document.getElementById('loadingOverlay').style.display = 'none';
+            document.getElementById('submitBtn').disabled = false;
             
-            // Check if Android
-            const isAndroid = /android/i.test(userAgent);
-            
-            // Check if in-app browser
-            const isInAppBrowser = /Line|FB|FBAV|Instagram|WebView|wv/.test(userAgent) ||
-                                  (userAgent.includes('Mobile') && !userAgent.includes('Safari')) ||
-                                  userAgent.includes('MicroMessenger');
-            
-            return {
-                isIOS: isIOS,
-                isAndroid: isAndroid,
-                isInAppBrowser: isInAppBrowser,
-                isMobile: isIOS || isAndroid,
-                isDesktop: !isIOS && !isAndroid
-            };
-        }
-        
-        // Custom Modal Functions
-        function showModal(type, title, message) {
-            const modal = document.getElementById('customModal');
-            const icon = document.getElementById('modalIcon');
-            const titleEl = document.getElementById('modalTitle');
-            const messageEl = document.getElementById('modalMessage');
-            
-            // Set icon based on type
-            icon.className = `modal-icon ${type}`;
-            switch(type) {
-                case 'success':
-                    icon.innerHTML = '✓';
-                    break;
-                case 'error':
-                    icon.innerHTML = '✕';
-                    break;
-                case 'warning':
-                    icon.innerHTML = '⚠';
-                    break;
-                case 'info':
-                    icon.innerHTML = 'ℹ';
-                    break;
-            }
-            
-            titleEl.textContent = title;
-            messageEl.textContent = message;
-            
-            modal.classList.add('show');
-        }
-        
-        function closeModal() {
-            const modal = document.getElementById('customModal');
-            modal.classList.remove('show');
-        }
-        
-        // Close modal on background click
-        document.getElementById('customModal').addEventListener('click', (e) => {
-            if (e.target.id === 'customModal') {
-                closeModal();
-            }
-        });
-        
-        // Form submission
-        document.getElementById('surveyForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const title = document.querySelector('input[name="title"]:checked');
-            const fullname = document.getElementById('fullname').value;
-            
-            if (!title) {
-                showModal('warning', 'กรุณาเลือกข้อมูล', 'กรุณาเลือกคำนำหน้าชื่อ');
-                return;
-            }
-            
-            // Store for later use
-            currentEmail = document.getElementById('email').value;
-            currentFullName = title.value + fullname;
-            
-            // Validate all required fields
-            const requiredFields = [
-                'q1_1', 'q1_2', 'q1_3',
-                'q2_1', 'q2_2', 'q2_3',
-                'q3_1', 'q3_2',
-                'q4_1', 'q4_2'
-            ];
-            
-            let allFieldsValid = true;
-            for (const fieldName of requiredFields) {
-                const field = document.querySelector(`input[name="${fieldName}"]:checked`);
-                if (!field) {
-                    allFieldsValid = false;
-                    break;
-                }
-            }
-            
-            if (!allFieldsValid) {
-                showModal('warning', 'ข้อมูลไม่ครบถ้วน', 'กรุณาตอบคำถามให้ครบทุกข้อ');
-                return;
-            }
-            
-            // Show loading
-            document.getElementById('loadingOverlay').style.display = 'flex';
-            document.getElementById('submitBtn').disabled = true;
-            
-            // Generate certificate first and get base64
-            await generateCertificate(currentFullName);
-            
-            // Collect form data with certificate
-            const formData = {
-                title: title.value,
-                fullname: fullname,
-                email: currentEmail,
-                organization: document.getElementById('organization').value,
-                q1_1: document.querySelector('input[name="q1_1"]:checked').value,
-                q1_2: document.querySelector('input[name="q1_2"]:checked').value,
-                q1_3: document.querySelector('input[name="q1_3"]:checked').value,
-                q2_1: document.querySelector('input[name="q2_1"]:checked').value,
-                q2_2: document.querySelector('input[name="q2_2"]:checked').value,
-                q2_3: document.querySelector('input[name="q2_3"]:checked').value,
-                q3_1: document.querySelector('input[name="q3_1"]:checked').value,
-                q3_2: document.querySelector('input[name="q3_2"]:checked').value,
-                q4_1: document.querySelector('input[name="q4_1"]:checked').value,
-                q4_2: document.querySelector('input[name="q4_2"]:checked').value,
-                suggestions: document.getElementById('suggestions').value,
-                fullnameWithTitle: currentFullName,
-                courseTitle: 'รายงานการประชุมยุคใหม่ สั่งได้ด้วย AI & MS Teams',
-                courseDate: '6 สิงหาคม 2568',
-                certificateImage: certificateBase64
-            };
-            
-            try {
-                // Send data to Google Apps Script
-                const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData)
-                });
-                
-                // Hide loading
-                document.getElementById('loadingOverlay').style.display = 'none';
-                document.getElementById('submitBtn').disabled = false;
-                
-                // Device specific message
-                const device = detectDevice();
-                let successMessage = 'ส่งแบบประเมินและบันทึก Certificate เรียบร้อยแล้ว\nขอบคุณสำหรับความคิดเห็นของท่าน';
-                
-                if (device.isIOS || device.isInAppBrowser) {
-                    successMessage += '\n\nคุณสามารถบันทึก Certificate ได้ในหน้าถัดไป';
-                }
-                
+            if (response.result === 'success' && response.certificateFileId) {
                 // Show success message
-                showModal('success', 'ส่งข้อมูลสำเร็จ', successMessage);
+                document.getElementById('successOverlay').style.display = 'flex';
                 
-                // Show certificate after modal closes
+                // Set manual link
+                const certificateUrl = `https://drive.google.com/file/d/${response.certificateFileId}/view`;
+                document.getElementById('manualLink').href = certificateUrl;
+                
+                // Auto redirect after 2 seconds
                 setTimeout(() => {
-                    showCertificate(currentFullName);
+                    window.location.href = certificateUrl;
                 }, 2000);
                 
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('loadingOverlay').style.display = 'none';
-                document.getElementById('submitBtn').disabled = false;
-                showModal('error', 'เกิดข้อผิดพลาด', 'เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง');
+            } else if (response.result === 'error') {
+                alert('เกิดข้อผิดพลาด: ' + response.message);
+            } else {
+                alert('ส่งแบบประเมินเรียบร้อยแล้ว แต่ไม่สามารถเปิด Certificate ได้\nกรุณาตรวจสอบอีเมลของคุณ');
             }
-        });
+            
+            // Clean up script tag
+            const scriptTag = document.getElementById('jsonpScript');
+            if (scriptTag) {
+                scriptTag.remove();
+            }
+        };
         
+        // Update loading progress
+        function updateLoadingProgress(percent, status) {
+            const progressBar = document.getElementById('progressBar');
+            const loadingStatus = document.getElementById('loadingStatus');
+            
+            if (progressBar) {
+                progressBar.style.width = percent + '%';
+            }
+            if (loadingStatus) {
+                loadingStatus.textContent = status;
+            }
+        }
+        
+        // Generate certificate base64
         async function generateCertificate(name) {
             try {
                 // Load SVG file
@@ -781,166 +648,127 @@
             }
         }
         
-        async function showCertificate(name) {
-            try {
-                const response = await fetch('../templates/certificate-01.svg');
-                const svgText = await response.text();
-                
-                // Insert SVG into container
-                document.getElementById('certificate-svg-container').innerHTML = svgText;
-                
-                // Update name in SVG
-                const nameElement = document.querySelector('#certificate-svg-container #name');
-                if (nameElement) {
-                    nameElement.textContent = name;
-                }
-                
-                // Show appropriate instructions based on device
-                const device = detectDevice();
-                const downloadBtn = document.getElementById('downloadBtnText');
-                const iosInstruction = document.getElementById('iosInstruction');
-                
-                if (device.isIOS || device.isInAppBrowser) {
-                    downloadBtn.textContent = 'เปิด Certificate ในหน้าใหม่';
-                    if (device.isIOS) {
-                        iosInstruction.classList.add('show');
-                    }
-                } else {
-                    downloadBtn.textContent = 'ดาวน์โหลด Certificate';
-                }
-                
-                // Show certificate container
-                const container = document.getElementById('certificate-container');
-                container.classList.add('show');
-                
-                // Animate certificate
-                setTimeout(() => {
-                    document.querySelector('.certificate').style.animation = 'slideIn 0.5s ease-out';
-                }, 100);
-            } catch (error) {
-                console.error('Error loading certificate:', error);
-                showModal('error', 'เกิดข้อผิดพลาด', 'ไม่สามารถโหลดไฟล์ certificate.svg ได้\nกรุณาตรวจสอบว่าไฟล์อยู่ในโฟลเดอร์เดียวกับ index.html');
-            }
-        }
-        
-        function closeCertificate() {
-            const container = document.getElementById('certificate-container');
-            container.classList.remove('show');
-        }
-        
-        async function saveCertificate() {
-            if (!certificateBase64 || !currentEmail) {
-                showModal('warning', 'ไม่สามารถดำเนินการได้', 'กรุณาส่งแบบประเมินก่อนบันทึก Certificate');
+        // Form submission with JSONP
+        document.getElementById('surveyForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const title = document.querySelector('input[name="title"]:checked');
+            const fullname = document.getElementById('fullname').value;
+            
+            if (!title) {
+                alert('กรุณาเลือกคำนำหน้าชื่อ');
                 return;
             }
             
-            const device = detectDevice();
+            // Store email for later use
+            currentEmail = document.getElementById('email').value;
             
-            // Convert base64 to blob
-            const byteCharacters = atob(certificateBase64);
-            const byteNumbers = new Array(byteCharacters.length);
-            for (let i = 0; i < byteCharacters.length; i++) {
-                byteNumbers[i] = byteCharacters.charCodeAt(i);
-            }
-            const byteArray = new Uint8Array(byteNumbers);
-            const blob = new Blob([byteArray], { type: 'image/png' });
+            // Combine title and name
+            const fullNameWithTitle = title.value + fullname;
             
-            // Create data URL for opening in new tab
-            const dataURL = 'data:image/png;base64,' + certificateBase64;
+            // Validate all required fields
+            const requiredFields = [
+                'q1_1', 'q1_2', 'q1_3',
+                'q2_1', 'q2_2', 'q2_3',
+                'q3_1', 'q3_2',
+                'q4_1', 'q4_2'
+            ];
             
-            if (device.isIOS || device.isInAppBrowser) {
-                // For iOS and in-app browsers: Open in new tab/window
-                const newWindow = window.open();
-                if (newWindow) {
-                    newWindow.document.write(`
-                        <!DOCTYPE html>
-                        <html>
-                        <head>
-                            <title>Certificate - ${currentFullName}</title>
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <style>
-                                body {
-                                    margin: 0;
-                                    padding: 20px;
-                                    background: #f5f5f5;
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: center;
-                                    min-height: 100vh;
-                                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                                }
-                                .container {
-                                    text-align: center;
-                                    background: white;
-                                    padding: 20px;
-                                    border-radius: 12px;
-                                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                                }
-                                img {
-                                    max-width: 100%;
-                                    height: auto;
-                                    border-radius: 8px;
-                                    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-                                }
-                                .instructions {
-                                    margin-top: 20px;
-                                    padding: 15px;
-                                    background: #f0f4ff;
-                                    border-radius: 8px;
-                                    color: #333;
-                                    font-size: 14px;
-                                    line-height: 1.6;
-                                }
-                                .instructions strong {
-                                    color: #667eea;
-                                }
-                                h2 {
-                                    color: #333;
-                                    margin-bottom: 20px;
-                                }
-                            </style>
-                        </head>
-                        <body>
-                            <div class="container">
-                                <h2>Certificate ของคุณ</h2>
-                                <img src="${dataURL}" alt="Certificate">
-                                <div class="instructions">
-                                    <strong>วิธีบันทึกรูป:</strong><br>
-                                    กดค้างที่รูป Certificate ด้านบน<br>
-                                    → เลือก "Save Image" หรือ "บันทึกรูปภาพ"<br>
-                                    → รูปจะถูกบันทึกในอัลบั้มรูปภาพของคุณ
-                                </div>
-                            </div>
-                        </body>
-                        </html>
-                    `);
-                    newWindow.document.close();
-                } else {
-                    // Fallback if popup blocked
-                    showModal('info', 'คำแนะนำ', 'กรุณาอนุญาต Pop-up ในเบราว์เซอร์\nหรือกดค้างที่รูป Certificate ด้านบน\nแล้วเลือก "Save Image"');
+            let allFieldsValid = true;
+            for (const fieldName of requiredFields) {
+                const field = document.querySelector(`input[name="${fieldName}"]:checked`);
+                if (!field) {
+                    allFieldsValid = false;
+                    break;
                 }
-            } else {
-                // For desktop and Android: Download directly
-                const link = document.createElement('a');
-                link.download = `certificate_${currentEmail}.png`;
-                link.href = URL.createObjectURL(blob);
-                link.click();
-                URL.revokeObjectURL(link.href);
             }
-        }
-        
-        // Close certificate on background click
-        document.getElementById('certificate-container').addEventListener('click', (e) => {
-            if (e.target.id === 'certificate-container') {
-                closeCertificate();
+            
+            if (!allFieldsValid) {
+                alert('กรุณาตอบคำถามให้ครบทุกข้อ');
+                return;
             }
-        });
-        
-        // Add keyboard support for closing modals
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeModal();
-                closeCertificate();
+            
+            // Show loading with progress
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            document.getElementById('submitBtn').disabled = true;
+            updateLoadingProgress(10, 'กำลังเตรียมข้อมูล...');
+            
+            try {
+                // Generate certificate first
+                updateLoadingProgress(30, 'กำลังสร้าง Certificate...');
+                await generateCertificate(fullNameWithTitle);
+                updateLoadingProgress(60, 'กำลังส่งข้อมูล...');
+                
+                // Collect form data
+                const formData = {
+                    title: title.value,
+                    fullname: fullname,
+                    email: currentEmail,
+                    organization: document.getElementById('organization').value,
+                    q1_1: document.querySelector('input[name="q1_1"]:checked').value,
+                    q1_2: document.querySelector('input[name="q1_2"]:checked').value,
+                    q1_3: document.querySelector('input[name="q1_3"]:checked').value,
+                    q2_1: document.querySelector('input[name="q2_1"]:checked').value,
+                    q2_2: document.querySelector('input[name="q2_2"]:checked').value,
+                    q2_3: document.querySelector('input[name="q2_3"]:checked').value,
+                    q3_1: document.querySelector('input[name="q3_1"]:checked').value,
+                    q3_2: document.querySelector('input[name="q3_2"]:checked').value,
+                    q4_1: document.querySelector('input[name="q4_1"]:checked').value,
+                    q4_2: document.querySelector('input[name="q4_2"]:checked').value,
+                    suggestions: document.getElementById('suggestions').value,
+                    fullnameWithTitle: fullNameWithTitle,
+                    courseTitle: 'รายงานการประชุมยุคใหม่ สั่งได้ด้วย AI & MS Teams',
+                    courseDate: '6 สิงหาคม 2568',
+                    certificateImage: certificateBase64
+                };
+                
+                updateLoadingProgress(80, 'กำลังบันทึก Certificate...');
+                
+                // Create unique callback name
+                const callbackName = 'handleSurveyResponse';
+                callbackCounter++;
+                
+                // Create JSONP request
+                const script = document.createElement('script');
+                script.id = 'jsonpScript';
+                
+                // Encode data as URL parameter
+                const encodedData = encodeURIComponent(JSON.stringify(formData));
+                
+                // Build URL with callback and data
+                script.src = `${GOOGLE_APPS_SCRIPT_URL}?callback=${callbackName}&data=${encodedData}`;
+                
+                // Handle timeout
+                const timeout = setTimeout(() => {
+                    script.remove();
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                    document.getElementById('submitBtn').disabled = false;
+                    alert('การเชื่อมต่อใช้เวลานานเกินไป กรุณาลองใหม่อีกครั้ง');
+                }, 30000); // 30 seconds timeout
+                
+                // Clear timeout on load
+                script.onload = () => {
+                    clearTimeout(timeout);
+                    updateLoadingProgress(100, 'เสร็จสิ้น!');
+                };
+                
+                // Handle error
+                script.onerror = () => {
+                    clearTimeout(timeout);
+                    script.remove();
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                    document.getElementById('submitBtn').disabled = false;
+                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง');
+                };
+                
+                // Append script to trigger request
+                document.body.appendChild(script);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loadingOverlay').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+                alert('เกิดข้อผิดพลาดในการสร้าง Certificate กรุณาลองใหม่อีกครั้ง');
             }
         });
     </script>
